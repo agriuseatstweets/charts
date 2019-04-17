@@ -1,0 +1,15 @@
+image:
+  repository: nandanrao/agrius-belly
+  tag: latest
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+schedule: "*/5 * * * *"
+completions: 2
+parallelism: 2
+
+google: {}
+resources: {}
+

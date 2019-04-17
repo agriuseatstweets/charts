@@ -1,0 +1,62 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-logstash
+  labels:
+    app: agrius-logstash
+spec:
+  serviceName: agrius-logstash
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agrius-logstash
+  template:
+    metadata:
+      labels:
+        app: agrius-logstash
+    spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources: 
+            {{- toYaml .Values.resources | nindent 12}}
+          env:
+            - name: XPACK_MONITORING_ENABLED
+              value: "false"
+            - name: PIPELINE_WORKERS
+              value: "2"
+            - name: QUEUE_TYPE
+              value: "persisted"
+            - name: LS_JAVA_OPTS
+              value: "-Xmx1024m -Xms512m -XX:ParallelGCThreads=2"
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/logstash/data
+            - name: pipeline
+              mountPath: /usr/share/logstash/pipeline
+            - name: keys
+              mountPath: /usr/share/keys
+              readOnly: true
+      volumes:
+        - name: keys
+          secret:
+            secretName: {{ .Values.keySecret }}
+        - name: pipeline
+          configMap:
+            name: {{ .Release.Name }}-pipeline
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+      {{- if .Values.persistence.storageClass }}
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+      {{- end }}
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi

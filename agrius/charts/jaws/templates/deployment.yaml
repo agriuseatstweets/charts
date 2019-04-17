@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-jaws-deployment
+  labels:
+    app: {{ .Release.Name }}-jaws
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-jaws
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-jaws
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - secretRef: 
+                name: {{ .Values.envSecret }}
+          ports:
+            - containerPort: 5000
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: "keys/key.json"
+          - name: GOOGLE_PROJECT_ID
+            value: "{{ .Values.google.projectId }}"
+          - name: JAWS_TOPIC
+            value: "{{ .Values.google.topic }}"
+          - name: JAWS_SHEET_ID
+            value: "{{ .Values.sheets.sheetId }}"
+          - name: JAWS_SHEET_USERS
+            value: "{{ .Values.sheets.users }}"
+          - name: JAWS_SHEET_HASHTAGS
+            value: "{{ .Values.sheets.hashtags }}"
+          - name: JAWS_SHEET_URLS
+            value: "{{ .Values.sheets.urls }}"
+          - name: JAWS_REFRESH_INTERVAL
+            value: "{{ .Values.refreshInterval }}"
+          - name: T_QUEUE_SIZE
+            value: "1000000"
+          - name: T_THREADS
+            value: "100"
+          - name: JAVA_TOOL_OPTIONS
+            value: "-Xms256m -Xmx1024m -XX:MaxGCPauseMillis=1000"
+          volumeMounts:
+              - name: keys
+                mountPath: /usr/src/app/keys
+                readOnly: true
+      volumes:
+        - name: keys
+          secret:
+            secretName: {{ .Values.keySecret }}

@@ -1,0 +1,12 @@
+image:
+  repository: nandanrao/agrius-logstash
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources: {}
+persistence: {}
+
+

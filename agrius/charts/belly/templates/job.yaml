@@ -1,0 +1,40 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-belly
+spec:
+  schedule: "{{ .Values.schedule }}"
+  jobTemplate:
+    spec:
+      completions: {{ .Values.completions }}
+      parallelism: {{ .Values.parallelism }}
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: {{ .Chart.Name }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14}}
+            env: 
+              - name: GOOGLE_APPLICATION_CREDENTIALS
+                value: "/usr/share/keys/key.json"
+              - name: GOOGLE_PROJECT_ID
+                value: {{ .Values.google.projectId}}
+              - name: GOOGLE_PUBSUB_SUBSCRIPTION
+                value: {{ .Values.google.subscription}}
+              - name: BELLY_LOCATION
+                value: {{ .Values.google.bucket }}
+              - name: BELLY_SIZE
+                value: "20"
+              - name: LS_JAVA_OPTS
+                value: "-Xmx1024m -Xms256m"
+            volumeMounts:
+              - name: keys
+                mountPath: /usr/share/keys
+                readOnly: true
+          volumes:
+            - name: keys
+              secret:
+                secretName: {{ .Values.keySecret }}

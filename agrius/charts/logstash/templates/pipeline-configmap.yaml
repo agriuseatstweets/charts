@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-pipeline
+  labels:
+    app: agrius-logstash
+data:
+  input.conf: |-
+    input {
+      google_pubsub {
+        project_id => "{{ .Values.pubsub.projectid }}"
+        topic => "{{ .Values.pubsub.topic }}"
+        subscription => "{{ .Values.pubsub.subscription }}"
+        json_key_file => "/usr/share/keys/key.json"
+        create_subscription => false
+      }
+    }
+
+  filter.conf: |-
+    filter {
+      json {
+        source => "message"
+      }
+      date {
+        match => [ "created_at", "EEE MMM dd HH:mm:ss '+0000' yyyy"]
+      }
+      ruby {
+        path => '/usr/share/scripts/prep_tweet.rb'
+      }
+      mutate {
+        remove_field => [ "message", "extended_entities", "geo", "host", "favorite_count", "favorited", "place", "coordinates", "source", "filter_level", "contributors", "timestamp_ms", "quoted_status_permalink", "quoted_status_id", "quoted_status_id_str" ]
+      }
+      if "delete" in [tags] {
+        drop {}
+      }
+    }
+
+  output.conf: |-
+    output {
+      if "limit" in [tags] {
+        elasticsearch {
+          hosts => ["{{ .Release.Name }}-elasticsearch-client.default.svc.cluster.local:9200"]
+          index => "agrius-limits"
+        }
+      } else {
+        elasticsearch {
+          hosts => ["{{ .Release.Name }}-elasticsearch-client.default.svc.cluster.local:9200"]
+          document_id => "%{[id]}"
+          index => "agrius-%{+xxxx.ww}"
+        }
+      }
+    }

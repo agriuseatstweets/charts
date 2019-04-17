@@ -1,0 +1,106 @@
+tags:
+  dashboard: true
+
+belly:
+  schedule: "*/5 * * * *"
+  completions: 1
+  parallelism: 1
+  keySecret: agrius-belly-keys
+  google:
+    projectId: "toixotoixo"
+    subscription: "agrius-spain-belly"
+    bucket: "agrius-spain"
+
+jaws:
+  envSecret: agrius-jaws-envs
+  keySecret: agrius-jaws-keys
+  refreshInterval: "30"
+  google: 
+    projectId: "toixotoixo"
+    topic: "agrius-spain"
+
+  sheets:
+    sheetId: "1tTdi29asCLDT5uWxdhvizOhP6wVT-Y0HtAS9bsxizdY"
+    users: "follows!H2:H"
+    hashtags: "follows!B2:B"
+    urls: "follows!G2:G"
+
+  resources: 
+    requests:
+      cpu: "100m"
+      memory: "512Mi"
+
+logstash:
+  keySecret: agrius-logstash-keys
+  persistence: {}
+  # storageClass: europe-ssd-bcd
+  pubsub:
+    projectid: "toixotoixo"
+    topic: "agrius-spain"
+    subscription: "agrius-spain-logstash"
+
+elasticsearch:
+  cluster:
+    name: "elasticsearch"
+    xpackEnable: false
+    config: {}
+    additionalJavaOpts: ""
+    bootstrapShellCommand: ""
+    env:
+      MINIMUM_MASTER_NODES: "1"
+
+  client: 
+    # replicas: 2
+    # heapSize: "256m"
+
+  master:
+    name: master
+    exposeHttp: false
+    replicas: 2
+    # heapSize: "256m"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      name: data
+      # size: "4Gi"
+      # storageClass: europe-ssd-bcd
+
+
+  data:
+    name: data
+    exposeHttp: false
+    replicas: 1
+    # heapSize: "512m"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      name: data
+      # size: "100Gi"
+      # storageClass: europe-ssd-bcd
+    # resources:
+    #   limits:
+    #     cpu: "1"
+    #   requests:
+    #     cpu: "25m"
+    #     memory: "512Mi"
+
+kibana:
+  env:
+    ELASTICSEARCH_URL: "http://ag-elasticsearch-client.default.svc.cluster.local:9200"
+
+  # ingress:
+    # enabled: true
+    # hosts:
+    #   - agrius.nandan.cloud
+    # annotations:
+    #   certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    # tls:
+    #   - secretName: agrius-kibana-cert
+    #     hosts:
+    #       - agrius.nandan.cloud
+
+  files:
+    kibana.yml:
+      elasticsearch:
+        hosts: "http://ag-elasticsearch-client.default.svc.cluster.local:9200"
+        requestTimeout: 60000
