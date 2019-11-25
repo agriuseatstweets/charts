@@ -15,17 +15,17 @@ jaws:
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   refreshInterval: "30"
-  google: 
+  google:
     projectId: "toixotoixo"
     topic: "agrius-spain"
-
   sheets:
     sheetId: "1tTdi29asCLDT5uWxdhvizOhP6wVT-Y0HtAS9bsxizdY"
     users: "follows!H2:H"
     hashtags: "follows!B2:B"
     urls: "follows!G2:G"
-
-  resources: 
+  java:
+    toolOptions: "-Xms256m -Xmx1024m -XX:MaxGCPauseMillis=1000"
+  resources:
     requests:
       cpu: "100m"
       memory: "512Mi"
@@ -49,7 +49,7 @@ elasticsearch:
     env:
       MINIMUM_MASTER_NODES: "1"
 
-  client: 
+  client:
     # replicas: 2
     # heapSize: "256m"
 

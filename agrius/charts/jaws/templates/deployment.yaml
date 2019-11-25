@@ -19,7 +19,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
-            - secretRef: 
+            - secretRef:
                 name: {{ .Values.envSecret }}
           ports:
             - containerPort: 5000
@@ -47,7 +47,7 @@ spec:
           - name: T_THREADS
             value: "100"
           - name: JAVA_TOOL_OPTIONS
-            value: "-Xms256m -Xmx1024m -XX:MaxGCPauseMillis=1000"
+            value: "{{ .Values.java.toolOptions }}"
           volumeMounts:
               - name: keys
                 mountPath: /usr/src/app/keys
