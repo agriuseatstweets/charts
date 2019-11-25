@@ -1,6 +1,6 @@
 image:
   repository: nandanrao/agrius-logstash
-  tag: 0.0.1
+  tag: 0.0.2
   pullPolicy: IfNotPresent
 
 nameOverride: ""

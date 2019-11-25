@@ -101,6 +101,6 @@ kibana:
 
   files:
     kibana.yml:
+      elasticsearch.url: "http://ag-elasticsearch-client.default.svc.cluster.local:9200"
       elasticsearch:
-        hosts: "http://ag-elasticsearch-client.default.svc.cluster.local:9200"
         requestTimeout: 60000

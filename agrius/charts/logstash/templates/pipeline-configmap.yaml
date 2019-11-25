@@ -47,6 +47,7 @@ data:
           hosts => ["{{ .Release.Name }}-elasticsearch-client.default.svc.cluster.local:9200"]
           document_id => "%{[id]}"
           index => "agrius-%{+xxxx.ww}"
+          template => "/usr/share/templates/mapping.json"
         }
       }
     }
