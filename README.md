@@ -1,0 +1,30 @@
+# Agrius
+
+Agrius is meant to be a turn-key, open-source solution for collecting and storing tweets into cloud storage.
+
+## Design
+
+``` shell
+                  XXXXX                                                 XXX
+               X X    X                               +---+         XXXX   XX  XXXX
+XXXXXXXXXXXXXXXX      XXX      +-----------+          |   |         X       XXX    XX
+X                     X        |           |          |   |       XXX               X
+XXX      Twitter     XXX +---->+   Jaws    +--------->+   |    XXXX                  X
+  XXXXX    Streaming   X       |           |          |   |   X     Google Cloud    XX
+       XXXX           XX       +-----------+          |   |   X     Storage     XXXXX
+       XXX         XXXX                               |   |   XX                X  + ^
+      XX  XXXX    XX                                  | Q |    XX     XX       XX  | |
+    XXXXXXX  XXXXX               +--------------+     | U |      XXXXX XX      X   | |
+    XX                           |              |     | E |         ^   XXXXXXXX   | |
+                                 |   Logstash   +<----+ U |         |              | |
+                                 |              |     | E |         |              v |
+                                 +-----------+--+     |   |    +----+----+   +-----+-+-+
++---------------+                            |        |   |    |  Belly  |   |   Gut   |
+|---------------|                            |        |   |    +--+-+----+   +------+--+
+||             ||         +---------------+  |        |   |       | ^               |
+|| Kibana      |---------->               |  |        |   +-------+ |               |
+|| Dashboard   |----------+ Elasticsearch <--+        |   +---Batch-+               v
+||             ||         |               |           |   |                        CSV
+|---------------|         +---------------+           +---+
++---------------+
+```
