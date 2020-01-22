@@ -40,6 +40,8 @@ spec:
             value: "{{ .Values.sheets.hashtags }}"
           - name: JAWS_SHEET_URLS
             value: "{{ .Values.sheets.urls }}"
+          - name: JAWS_SHEET_LOCATIONS
+            value: "{{ .Values.sheets.locations }}"
           - name: JAWS_REFRESH_INTERVAL
             value: "{{ .Values.refreshInterval }}"
           - name: T_QUEUE_SIZE

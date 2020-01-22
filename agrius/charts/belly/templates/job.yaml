@@ -6,8 +6,8 @@ spec:
   schedule: "{{ .Values.schedule }}"
   jobTemplate:
     spec:
-      completions: {{ .Values.completions }}
-      parallelism: {{ .Values.parallelism }}
+      completions: 1
+      parallelism: 1
       template:
         spec:
           restartPolicy: OnFailure

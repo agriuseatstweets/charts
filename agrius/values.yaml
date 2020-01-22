@@ -1,28 +1,47 @@
 tags:
-  dashboard: true
+  dashboard: false
 
 belly:
-  schedule: "*/5 * * * *"
+  schedule: "*/20 * * * *"
   completions: 1
   parallelism: 1
   keySecret: agrius-belly-keys
   google:
-    projectId: "toixotoixo"
-    subscription: "agrius-spain-belly"
-    bucket: "agrius-spain"
+    projectId: "trollhunters"
+    subscription: "agrius-spain-trolls"
+    bucket: "agrius-spain-trolls"
+
+claws:
+  schedule: "00 0 */6 * *"
+  envSecret: agrius-jaws-envs
+  keySecret: agrius-jaws-keys
+  google:
+    projectId: "trollhunters"
+    topic: "agrius-spain-trolls"
+  sheets:
+    sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
+    users: "follows!D2:D"
+    hashtags: "follows!C2:C"
+    urls: "follows!B2:B"
+    locations: "follows!F2:F"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "512Mi"
 
 jaws:
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   refreshInterval: "30"
   google:
-    projectId: "toixotoixo"
-    topic: "agrius-spain"
+    projectId: "trollhunters"
+    topic: "agrius-spain-trolls"
   sheets:
-    sheetId: "1tTdi29asCLDT5uWxdhvizOhP6wVT-Y0HtAS9bsxizdY"
-    users: "follows!H2:H"
-    hashtags: "follows!B2:B"
-    urls: "follows!G2:G"
+    sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
+    users: "follows!D2:D"
+    hashtags: "follows!C2:C"
+    urls: "follows!B2:B"
+    locations: "follows!E2:E"
   java:
     toolOptions: "-Xms256m -Xmx1024m -XX:MaxGCPauseMillis=1000"
   resources:
@@ -35,7 +54,7 @@ logstash:
   persistence: {}
   # storageClass: europe-ssd-bcd
   pubsub:
-    projectid: "toixotoixo"
+    projectid: "trollhunters"
     topic: "agrius-spain"
     subscription: "agrius-spain-logstash"
 

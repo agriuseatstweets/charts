@@ -1,6 +1,6 @@
 image:
   repository: nandanrao/agrius-jaws
-  tag: 0.0.8
+  tag: 0.0.10
   pullPolicy: IfNotPresent
 
 nameOverride: ""
