@@ -1,0 +1,16 @@
+image:
+  repository: nandanrao/agrius-claws
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+schedule: "0 0 * * *"
+google: {}
+sheets: {}
+resources: {}
+
+
+
+

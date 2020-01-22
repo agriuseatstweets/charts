@@ -1,0 +1,47 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-claws
+spec:
+  schedule: "{{ .Values.schedule }}"
+  jobTemplate:
+    spec:
+      completions: {{ .Values.completions }}
+      parallelism: {{ .Values.parallelism }}
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: {{ .Chart.Name }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14}}
+            envFrom:
+              - secretRef:
+                  name: {{ .Values.envSecret }}
+            env:
+              - name: GOOGLE_APPLICATION_CREDENTIALS
+                value: "keys/key.json"
+              - name: GOOGLE_PROJECT_ID
+                value: "{{ .Values.google.projectId }}"
+              - name: CLAWS_TOPIC
+                value: "{{ .Values.google.topic }}"
+              - name: CLAWS_SHEET_ID
+                value: "{{ .Values.sheets.sheetId }}"
+              - name: CLAWS_SHEET_USERS
+                value: "{{ .Values.sheets.users }}"
+              - name: CLAWS_SHEET_HASHTAGS
+                value: "{{ .Values.sheets.hashtags }}"
+              - name: CLAWS_SHEET_URLS
+                value: "{{ .Values.sheets.urls }}"
+              - name: CLAWS_SHEET_LOCATIONS
+                value: "{{ .Values.sheets.locations }}"
+            volumeMounts:
+              - name: keys
+                mountPath: /app/keys
+                readOnly: true
+          volumes:
+            - name: keys
+              secret:
+                secretName: {{ .Values.keySecret }}
