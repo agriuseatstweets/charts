@@ -25,8 +25,10 @@ spec:
                 value: "keys/key.json"
               - name: GOOGLE_PROJECT_ID
                 value: "{{ .Values.google.projectId }}"
+              - name: CLAWS_QUEUE
+                value: "{{ .Values.queue.queue }}"
               - name: CLAWS_TOPIC
-                value: "{{ .Values.google.topic }}"
+                value: "{{ .Values.queue.topic }}"
               - name: CLAWS_SHEET_ID
                 value: "{{ .Values.sheets.sheetId }}"
               - name: CLAWS_SHEET_USERS

@@ -12,12 +12,16 @@ belly:
     bucket: "agrius-spain-trolls"
 
 claws:
-  schedule: "00 0 */6 * *"
+  image:
+    tag: 0.0.3
+  schedule: "20 11 * * *"
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
+  queue:
+    queue: "pubsub"
+    topic: "agrius-spain-trolls"
   google:
     projectId: "trollhunters"
-    topic: "agrius-spain-trolls"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
@@ -30,6 +34,8 @@ claws:
       memory: "512Mi"
 
 jaws:
+  image:
+    tag: 0.0.10
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   refreshInterval: "30"

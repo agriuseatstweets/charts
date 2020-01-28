@@ -7,10 +7,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 schedule: "0 0 * * *"
+queue: {}
 google: {}
 sheets: {}
 resources: {}
-
-
-
-
