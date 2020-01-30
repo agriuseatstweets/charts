@@ -1,4 +1,10 @@
 dependencies:
+- name: jaws
+  repository: https://agriuseatstweets.github.io/charts
+  version: 0.0.1
+- name: claws
+  repository: https://agriuseatstweets.github.io/charts
+  version: 0.0.1
 - name: belly
   repository: https://agriuseatstweets.github.io/charts
   version: 0.0.1
@@ -17,5 +23,5 @@ dependencies:
 - name: logstash
   repository: ""
   version: 0.1.0
-digest: sha256:f36b7c9d9b482d47fe7e4b53c1321cfcfae6fd2a1003af3b991ea1aa34aaafa6
-generated: "2020-01-30T11:18:52.822652916+01:00"
+digest: sha256:ddd37f4d16fa8ea969863d8e409363a13b6b982c9f67587ddbe1388f835f5941
+generated: "2020-01-30T11:25:13.296585427+01:00"
