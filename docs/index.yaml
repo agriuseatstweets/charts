@@ -3,7 +3,7 @@ entries:
   belly:
   - apiVersion: v2
     appVersion: 0.0.10
-    created: "2020-01-30T11:15:48.361201908+01:00"
+    created: "2020-01-30T11:23:18.76663145+01:00"
     description: A Helm chart for Kubernetes
     digest: 872e7ed7450b9f8cea1a359f8e95ad90f18081c2a36e8ef2495404f50f321f09
     name: belly
@@ -13,11 +13,31 @@ entries:
   bellyback:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-01-30T11:15:48.361454831+01:00"
+    created: "2020-01-30T11:23:18.766920357+01:00"
     description: A Helm chart for Kubernetes
     digest: d0209668d83e481a759a7a0c9457179a5556b0277c9d9ed4a8c39cdabdaa15e8
     name: bellyback
     urls:
     - bellyback-0.0.1.tgz
     version: 0.0.1
-generated: "2020-01-30T11:15:48.360789319+01:00"
+  claws:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2020-01-30T11:23:18.767171573+01:00"
+    description: A Helm chart for Kubernetes
+    digest: 9263e30c02d4cea837951f0f8794bf4dbc37d2be7d9da237e6760720902165f2
+    name: claws
+    urls:
+    - claws-0.0.1.tgz
+    version: 0.0.1
+  jaws:
+  - apiVersion: v2
+    appVersion: 0.0.10
+    created: "2020-01-30T11:23:18.767407984+01:00"
+    description: A Helm chart for Kubernetes
+    digest: 547492b699c69e4b3af6dce68bbb52beeb80daab81bfd1e515fe714b85767491
+    name: jaws
+    urls:
+    - jaws-0.0.1.tgz
+    version: 0.0.1
+generated: "2020-01-30T11:23:18.766138508+01:00"
