@@ -1,4 +1,10 @@
 dependencies:
+- name: belly
+  repository: https://agriuseatstweets.github.io/charts
+  version: 0.0.1
+- name: bellyback
+  repository: https://agriuseatstweets.github.io/charts
+  version: 0.0.1
 - name: kafka
   repository: https://storage.googleapis.com/kubernetes-charts-incubator
   version: 0.20.8
@@ -11,5 +17,5 @@ dependencies:
 - name: logstash
   repository: ""
   version: 0.1.0
-digest: sha256:3a8aba258e30c0d9628fc50d3b44536dc5a1a1d5d21489de37a6131e027a34cc
-generated: "2020-01-30T01:05:36.469816278+01:00"
+digest: sha256:f36b7c9d9b482d47fe7e4b53c1321cfcfae6fd2a1003af3b991ea1aa34aaafa6
+generated: "2020-01-30T11:18:52.822652916+01:00"

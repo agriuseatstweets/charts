@@ -4,9 +4,17 @@ description: A Helm chart for Kubernetes
 name: agrius
 version: 0.1.0
 dependencies:
+  - name: belly
+    version: 0.0.1
+    repository: https://agriuseatstweets.github.io/charts
+  - name: bellyback
+    version: 0.0.1
+    repository: https://agriuseatstweets.github.io/charts
   - name: kafka
     version: 0.20.8
     repository: https://storage.googleapis.com/kubernetes-charts-incubator
+    tags:
+      - kafka
   - name: elasticsearch
     version: 1.24.0
     repository: https://kubernetes-charts.storage.googleapis.com
