@@ -3,11 +3,21 @@ entries:
   belly:
   - apiVersion: v2
     appVersion: 0.0.10
-    created: "2020-01-30T10:59:54.795129571+01:00"
+    created: "2020-01-30T11:15:48.361201908+01:00"
     description: A Helm chart for Kubernetes
     digest: 872e7ed7450b9f8cea1a359f8e95ad90f18081c2a36e8ef2495404f50f321f09
     name: belly
     urls:
     - belly-0.0.1.tgz
     version: 0.0.1
-generated: "2020-01-30T10:59:54.794647992+01:00"
+  bellyback:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2020-01-30T11:15:48.361454831+01:00"
+    description: A Helm chart for Kubernetes
+    digest: d0209668d83e481a759a7a0c9457179a5556b0277c9d9ed4a8c39cdabdaa15e8
+    name: bellyback
+    urls:
+    - bellyback-0.0.1.tgz
+    version: 0.0.1
+generated: "2020-01-30T11:15:48.360789319+01:00"
