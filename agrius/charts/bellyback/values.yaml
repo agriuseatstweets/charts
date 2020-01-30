@@ -1,5 +1,5 @@
 image:
-  repository: agriuseatstweets/belly
+  repository: agriuseatstweets/bellyback
   tag: latest
   pullPolicy: Always
 

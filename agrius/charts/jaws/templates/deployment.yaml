@@ -28,10 +28,14 @@ spec:
           env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: "keys/key.json"
-          - name: GOOGLE_PROJECT_ID
-            value: "{{ .Values.google.projectId }}"
+          - name: JAWS_QUEUE
+            value: "{{ .Values.queue.queue }}"
           - name: JAWS_TOPIC
-            value: "{{ .Values.google.topic }}"
+            value: "{{ .Values.queue.topic }}"
+          - name: KAFKA_BROKERS
+            value: "{{ .Values.queue.kafkaBrokers }}"
+          - name: GOOGLE_PROJECT_ID
+            value: "{{ .Values.queue.googleProjectId }}"
           - name: JAWS_SHEET_ID
             value: "{{ .Values.sheets.sheetId }}"
           - name: JAWS_SHEET_USERS

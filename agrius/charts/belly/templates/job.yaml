@@ -6,8 +6,9 @@ spec:
   schedule: "{{ .Values.schedule }}"
   jobTemplate:
     spec:
-      completions: 1
-      parallelism: 1
+      completions: {{ .Values.completions }}
+      parallelism: {{ .Values.parallelism }}
+      backoffLimit: {{ .Values.backoffLimit }}
       template:
         spec:
           restartPolicy: OnFailure
@@ -17,22 +18,24 @@ spec:
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             resources:
               {{- toYaml .Values.resources | nindent 14}}
-            env: 
+            env:
               - name: GOOGLE_APPLICATION_CREDENTIALS
-                value: "/usr/share/keys/key.json"
+                value: "/home/jupyter/work/keys/key.json"
+              - name: BELLY_QUEUE
+                value: "{{ .Values.queue.queue }}"
+              - name: KAFKA_BROKERS
+                value: "{{ .Values.queue.kafkaBrokers }}"
+              - name: BELLY_TOPIC
+                value: "{{ .Values.queue.topic }}"
               - name: GOOGLE_PROJECT_ID
-                value: {{ .Values.google.projectId}}
-              - name: GOOGLE_PUBSUB_SUBSCRIPTION
-                value: {{ .Values.google.subscription}}
+                value: "{{ .Values.queue.googleProjectId}}"
               - name: BELLY_LOCATION
-                value: {{ .Values.google.bucket }}
+                value: "{{ .Values.belly.location }}"
               - name: BELLY_SIZE
-                value: "20"
-              - name: LS_JAVA_OPTS
-                value: "-Xmx1024m -Xms256m"
+                value: "{{ .Values.belly.size }}"
             volumeMounts:
               - name: keys
-                mountPath: /usr/share/keys
+                mountPath: /home/jupyter/work/keys
                 readOnly: true
           volumes:
             - name: keys

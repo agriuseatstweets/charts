@@ -2,26 +2,49 @@ tags:
   dashboard: false
 
 belly:
+  image:
+    repository: agriuseatstweets/belly
+    tag: 0.0.10
   schedule: "*/20 * * * *"
   completions: 1
   parallelism: 1
+  backoffLimit: 1
   keySecret: agrius-belly-keys
-  google:
-    projectId: "trollhunters"
-    subscription: "agrius-spain-trolls"
-    bucket: "agrius-spain-trolls"
+  queue:
+    queue: "kafka"
+    topic: "tweets"
+    kafkaBrokers: "agrius-kafka:9092"
+  belly:
+    location: "gs://spain-tweets/datalake"
+    size: "90000"
+
+bellyback:
+  image:
+    repository: agriuseatstweets/bellyback
+    tag: 0.0.1
+  schedule: "*/15 * * * *"
+  completions: 1
+  parallelism: 1
+  keySecret: agrius-bellyback-keys
+  queue:
+    queue: "kafka"
+    topic: "tweets"
+    kafkaBrokers: "agrius-kafka:9092"
+  belly:
+    location: "spain-tweets-backup"
+    size: "20"
 
 claws:
   image:
+    repository: agriuseatstweets/claws
     tag: 0.0.3
-  schedule: "20 11 * * *"
+  schedule: "0 8 */5 * *"
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   queue:
-    queue: "pubsub"
-    topic: "agrius-spain-trolls"
-  google:
-    projectId: "trollhunters"
+    queue: "kafka"
+    kafkaBrokers: "agrius-kafka:9092"
+    topic: "tweets"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
@@ -35,13 +58,15 @@ claws:
 
 jaws:
   image:
+    repository: agriuseatstweets/jaws
     tag: 0.0.10
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   refreshInterval: "30"
-  google:
-    projectId: "trollhunters"
-    topic: "agrius-spain-trolls"
+  queue:
+    queue: "kafka"
+    kafkaBrokers: "agrius-kafka:9092"
+    topic: "tweets"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
@@ -54,6 +79,47 @@ jaws:
     requests:
       cpu: "100m"
       memory: "512Mi"
+
+kafka:
+  replicas: 3
+  imageTag: 5.4.0
+  resources:
+    requests:
+      cpu: 100m
+      memory: 4096Mi
+  kafkaHeapOptions: "-Xmx4G -Xms1G"
+  configurationOverrides:
+    "offsets.topic.replication.factor": 3
+  topics:
+    - name: tweets
+      config: "retention.ms=2678400000" # 31 days
+      partitions: 4
+      replicationFactor: 3
+  persistence:
+    size: "100Gi"
+    storageClass: "pd-ssd"
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - kafka
+        topologyKey: "kubernetes.io/hostname"
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+       - weight: 50
+         podAffinityTerm:
+           labelSelector:
+             matchExpressions:
+             - key: app
+               operator: In
+               values:
+                 - zookeeper
+           topologyKey: "kubernetes.io/hostname"
+
 
 logstash:
   keySecret: agrius-logstash-keys

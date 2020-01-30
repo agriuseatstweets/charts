@@ -1,13 +1,14 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-claws
+  name: {{ .Release.Name }}-bellyback
 spec:
   schedule: "{{ .Values.schedule }}"
   jobTemplate:
     spec:
       completions: {{ .Values.completions }}
       parallelism: {{ .Values.parallelism }}
+      backoffLimit: {{ .Values.backoffLimit }}
       template:
         spec:
           restartPolicy: OnFailure
@@ -17,33 +18,26 @@ spec:
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             resources:
               {{- toYaml .Values.resources | nindent 14}}
-            envFrom:
-              - secretRef:
-                  name: {{ .Values.envSecret }}
             env:
               - name: GOOGLE_APPLICATION_CREDENTIALS
-                value: "keys/key.json"
-              - name: GOOGLE_PROJECT_ID
-                value: "{{ .Values.queue.googleProjectId }}"
-              - name: CLAWS_QUEUE
+                value: "/usr/share/keys/key.json"
+              - name: BELLY_QUEUE
                 value: "{{ .Values.queue.queue }}"
               - name: KAFKA_BROKERS
                 value: "{{ .Values.queue.kafkaBrokers }}"
-              - name: PUB_TOPIC
+              - name: BELLY_TOPIC
                 value: "{{ .Values.queue.topic }}"
-              - name: CLAWS_SHEET_ID
-                value: "{{ .Values.sheets.sheetId }}"
-              - name: CLAWS_SHEET_USERS
-                value: "{{ .Values.sheets.users }}"
-              - name: CLAWS_SHEET_HASHTAGS
-                value: "{{ .Values.sheets.hashtags }}"
-              - name: CLAWS_SHEET_URLS
-                value: "{{ .Values.sheets.urls }}"
-              - name: CLAWS_SHEET_LOCATIONS
-                value: "{{ .Values.sheets.locations }}"
+              - name: GOOGLE_PROJECT_ID
+                value: "{{ .Values.queue.googleProjectId}}"
+              - name: BELLY_LOCATION
+                value: "{{ .Values.belly.location }}"
+              - name: BELLY_SIZE
+                value: "{{ .Values.belly.size }}"
+              - name: LS_JAVA_OPTS
+                value: "-Xmx2048m -Xms256m"
             volumeMounts:
               - name: keys
-                mountPath: /app/keys
+                mountPath: /usr/share/keys
                 readOnly: true
           volumes:
             - name: keys

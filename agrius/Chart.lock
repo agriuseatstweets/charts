@@ -1,0 +1,15 @@
+dependencies:
+- name: kafka
+  repository: https://storage.googleapis.com/kubernetes-charts-incubator
+  version: 0.20.8
+- name: elasticsearch
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.24.0
+- name: kibana
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 2.2.0
+- name: logstash
+  repository: ""
+  version: 0.1.0
+digest: sha256:3a8aba258e30c0d9628fc50d3b44536dc5a1a1d5d21489de37a6131e027a34cc
+generated: "2020-01-30T01:05:36.469816278+01:00"
