@@ -11,10 +11,20 @@ dependencies:
     version: 0.0.1
     repository: https://agriuseatstweets.github.io/charts
   - name: belly
-    version: 0.0.1
+    alias: belly-claws
+    version: 0.0.3
+    repository: https://agriuseatstweets.github.io/charts
+  - name: belly
+    alias: belly-jaws
+    version: 0.0.3
     repository: https://agriuseatstweets.github.io/charts
   - name: bellyback
-    version: 0.0.1
+    alias: bellyback-jaws
+    version: 0.0.2
+    repository: https://agriuseatstweets.github.io/charts
+  - name: bellyback
+    alias: bellyback-claws
+    version: 0.0.2
     repository: https://agriuseatstweets.github.io/charts
   - name: kafka
     version: 0.20.8

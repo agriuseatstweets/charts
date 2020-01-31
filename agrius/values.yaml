@@ -2,30 +2,41 @@ tags:
   dashboard: false
   kafka: true
 
-belly:
+belly-claws:
   image:
     repository: agriuseatstweets/belly
-    tag: 0.0.10
-  schedule: "*/20 * * * *"
+    tag: 0.0.21
+  schedule: "*/10 * * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 1
+  resources:
+    requests:
+      cpu: "750m"
+      memory: "5Gi"
   keySecret: agrius-belly-keys
   queue:
     queue: "kafka"
     topic: "tweets"
     kafkaBrokers: "agrius-kafka:9092"
+    kafkaPollInterval: "1920000"
   belly:
     location: "gs://spain-tweets/datalake"
     size: "90000"
+  spark:
+    driverMemory: "5g"
+    partitionSize: "1000"
 
-bellyback:
+bellyback-claws:
   image:
     repository: agriuseatstweets/bellyback
     tag: 0.0.1
-  schedule: "*/15 * * * *"
-  completions: 1
-  parallelism: 1
+  schedule: "*/5 * * * *"
+  completions: 2
+  parallelism: 2
+  resources:
+    requests:
+      memory: "512Mi"
   keySecret: agrius-bellyback-keys
   queue:
     queue: "kafka"
@@ -33,13 +44,54 @@ bellyback:
     kafkaBrokers: "agrius-kafka:9092"
   belly:
     location: "spain-tweets-backup"
-    size: "20"
+    size: "80"
+
+belly-jaws:
+  image:
+    repository: agriuseatstweets/belly
+    tag: 0.0.21
+  schedule: "0 0 * * *"
+  completions: 1
+  parallelism: 1
+  backoffLimit: 1
+  resources:
+    requests:
+      cpu: "1"
+      memory: "5Gi"
+  keySecret: agrius-belly-keys
+  queue:
+    queue: "kafka"
+    topic: "livetweets"
+    kafkaBrokers: "agrius-kafka:9092"
+    kafkaPollInterval: "1920000"
+  belly:
+    location: "gs://spain-tweets/datalake"
+    size: "90000"
+  spark:
+    driverMemory: "5g"
+    partitionSize: "1000"
+
+bellyback-jaws:
+  image:
+    repository: agriuseatstweets/bellyback
+    tag: 0.0.1
+  schedule: "0 0 * * *"
+  completions: 1
+  parallelism: 1
+  keySecret: agrius-bellyback-keys
+  queue:
+    queue: "kafka"
+    topic: "livetweets"
+    kafkaBrokers: "agrius-kafka:9092"
+  belly:
+    location: "spain-tweets-backup"
+    size: "80"
 
 claws:
   image:
     repository: agriuseatstweets/claws
-    tag: 0.0.3
-  schedule: "0 8 */5 * *"
+    tag: 0.0.6
+  schedule: "0 20 * * *"
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   queue:
@@ -67,7 +119,7 @@ jaws:
   queue:
     queue: "kafka"
     kafkaBrokers: "agrius-kafka:9092"
-    topic: "tweets"
+    topic: "livetweets"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
@@ -93,11 +145,15 @@ kafka:
     "offsets.topic.replication.factor": 3
   topics:
     - name: tweets
-      config: "retention.ms=2678400000" # 31 days
-      partitions: 4
+      config: "retention.ms=2678400000,compression.type=snappy" # 31 days
+      partitions: 8
+      replicationFactor: 3
+    - name: livetweets
+      config: "retention.ms=2678400000,compression.type=snappy" # 31 days
+      partitions: 1
       replicationFactor: 3
   persistence:
-    size: "100Gi"
+    size: "500Gi"
     storageClass: "pd-ssd"
   affinity:
     podAntiAffinity:
