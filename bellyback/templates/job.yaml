@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-bellyback
+  name: "{{- template "common.fullname" . -}}"
 spec:
   schedule: "{{ .Values.schedule }}"
   jobTemplate:

@@ -3,7 +3,20 @@ entries:
   belly:
   - apiVersion: v2
     appVersion: 0.0.19
-    created: "2020-01-31T15:11:40.204874674+01:00"
+    created: "2020-01-31T20:33:25.396923046+01:00"
+    dependencies:
+    - name: common
+      repository: https://storage.googleapis.com/kubernetes-charts-incubator
+      version: 0.0.5
+    description: A Helm chart for Kubernetes
+    digest: 58675141d14e8629cf4ccdbc4a5dea241b26d99585df70fb23206f976c20ddd5
+    name: belly
+    urls:
+    - belly-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 0.0.19
+    created: "2020-01-31T20:33:25.396038373+01:00"
     description: A Helm chart for Kubernetes
     digest: 83a0e452622b865b05d49dc3d20579ff0f82c5d0ed1ba6ab9534e865d5df2add
     name: belly
@@ -12,7 +25,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.10
-    created: "2020-01-31T15:11:40.204607491+01:00"
+    created: "2020-01-31T20:33:25.395535481+01:00"
     description: A Helm chart for Kubernetes
     digest: 872e7ed7450b9f8cea1a359f8e95ad90f18081c2a36e8ef2495404f50f321f09
     name: belly
@@ -22,7 +35,20 @@ entries:
   bellyback:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-01-31T15:11:40.205338812+01:00"
+    created: "2020-01-31T20:33:25.399326963+01:00"
+    dependencies:
+    - name: common
+      repository: https://storage.googleapis.com/kubernetes-charts-incubator
+      version: 0.0.5
+    description: A Helm chart for Kubernetes
+    digest: 20e2a081384b89564ad1d8fb7b30a6ed10a4aaf8d7f20a6064801fac8c5aa66d
+    name: bellyback
+    urls:
+    - bellyback-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2020-01-31T20:33:25.398012537+01:00"
     description: A Helm chart for Kubernetes
     digest: d0209668d83e481a759a7a0c9457179a5556b0277c9d9ed4a8c39cdabdaa15e8
     name: bellyback
@@ -32,7 +58,7 @@ entries:
   claws:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-01-31T15:11:40.205803459+01:00"
+    created: "2020-01-31T20:33:25.399735901+01:00"
     description: A Helm chart for Kubernetes
     digest: 9263e30c02d4cea837951f0f8794bf4dbc37d2be7d9da237e6760720902165f2
     name: claws
@@ -42,11 +68,11 @@ entries:
   jaws:
   - apiVersion: v2
     appVersion: 0.0.10
-    created: "2020-01-31T15:11:40.206152183+01:00"
+    created: "2020-01-31T20:33:25.400114526+01:00"
     description: A Helm chart for Kubernetes
     digest: 547492b699c69e4b3af6dce68bbb52beeb80daab81bfd1e515fe714b85767491
     name: jaws
     urls:
     - jaws-0.0.1.tgz
     version: 0.0.1
-generated: "2020-01-31T15:11:40.20389605+01:00"
+generated: "2020-01-31T20:33:25.394912896+01:00"

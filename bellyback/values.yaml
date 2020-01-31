@@ -3,7 +3,6 @@ image:
   tag: latest
   pullPolicy: Always
 
-nameOverride: ""
 fullnameOverride: ""
 
 schedule: "*/15 * * * *"
