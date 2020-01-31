@@ -25,6 +25,8 @@ spec:
                 value: "{{ .Values.queue.queue }}"
               - name: KAFKA_BROKERS
                 value: "{{ .Values.queue.kafkaBrokers }}"
+              - name: KAFKA_CONSUMER_POLL_INTERVAL
+                value: "{{ .Values.queue.kafkaPollInterval }}"
               - name: BELLY_TOPIC
                 value: "{{ .Values.queue.topic }}"
               - name: GOOGLE_PROJECT_ID
@@ -33,6 +35,13 @@ spec:
                 value: "{{ .Values.belly.location }}"
               - name: BELLY_SIZE
                 value: "{{ .Values.belly.size }}"
+              - name: GOOGLE_APPLICATION_CREDENTIALS
+                value: "/home/jupyter/work/keys/key.json"
+              - name: PARTITION_SIZE
+                value: "{{ .Values.spark.partitionSize }}"
+              - name: SPARK_DRIVER_MEMORY
+                value: "{{ .Values.spark.driverMemory }}"
+
             volumeMounts:
               - name: keys
                 mountPath: /home/jupyter/work/keys

@@ -12,5 +12,17 @@ parallelism: 1
 backoffLimit: 1
 
 resources: {}
+
 queue: {}
+# For kafka:
+  # queue: "kafka"
+  # topic: "tweets"
+  # kafkaBrokers: "agrius-kafka:9092"
+
+# set location info
 belly: {}
+  # location: "gs://foo"
+  # size: "90000"
+spark:
+  partitionSize: "10000"
+  driverMemory: "4g"
