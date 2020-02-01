@@ -1,0 +1,25 @@
+image:
+  repository: agriuseatstweets/rehydrate
+  tag: 0.0.6
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+schedule: "*/15 * * * *"
+completions: 1
+parallelism: 1
+backoffLimit: 1
+
+resources: {}
+
+envSecret: ""
+
+rehydrate:
+  topic: ""
+  pubTopic: ""
+  size: "90000"
+
+queue:
+  kafkaBrokers: "agrius-kafka:9092"
+  kafkaConsumerPollInterval: "960000"

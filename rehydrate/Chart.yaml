@@ -1,0 +1,9 @@
+apiVersion: v2
+appVersion: "0.0.6"
+description: A Helm chart for Kubernetes
+name: rehydrate
+version: 0.0.1
+dependencies:
+  - name: common
+    version: 0.0.5
+    repository: https://storage.googleapis.com/kubernetes-charts-incubator

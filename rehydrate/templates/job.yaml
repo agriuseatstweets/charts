@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "{{- template "common.fullname" . -}}"
+spec:
+  schedule: "{{ .Values.schedule }}"
+  jobTemplate:
+    spec:
+      completions: {{ .Values.completions }}
+      parallelism: {{ .Values.parallelism }}
+      backoffLimit: {{ .Values.backoffLimit }}
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: {{ .Chart.Name }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14}}
+            envFrom:
+              - secretRef:
+                  name: {{ .Values.envSecret }}
+            env:
+              - name: REHYDRATE_TOPIC
+                value: "{{ .Values.rehydrate.topic }}"
+              - name: PUB_TOPIC
+                value: "{{ .Values.rehydrate.pubTopic }}"
+              - name: KAFKA_BROKERS
+                value: "{{ .Values.queue.kafkaBrokers }}"
+              - name: KAFKA_CONSUMER_POLL_INTERVAL
+                value: "{{ .Values.queue.kafkaPollInterval }}"
+              - name: REHYDRATE_SIZE
+                value: "{{ .Values.rehydrate.size }}"
