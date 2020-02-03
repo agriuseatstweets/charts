@@ -1,0 +1,16 @@
+apiVersion: v2
+description: A Helm chart for Kubernetes
+name: hydra
+version: 0.0.1
+dependencies:
+  - name: belly
+    version: 0.0.4
+    repository: https://agriuseatstweets.github.io/charts
+  - name: bellyback
+    version: 0.0.4
+    repository: https://agriuseatstweets.github.io/charts
+  - name: kafka
+    version: 0.20.8
+    repository: https://storage.googleapis.com/kubernetes-charts-incubator
+    tags:
+      - kafka
