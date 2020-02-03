@@ -5,8 +5,8 @@ tags:
 belly-claws:
   image:
     repository: agriuseatstweets/belly
-    tag: 0.0.21
-  schedule: "*/10 * * * *"
+    tag: 0.0.22
+  schedule: "*/30 * * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 1
@@ -22,7 +22,7 @@ belly-claws:
     kafkaPollInterval: "1920000"
   belly:
     location: "gs://spain-tweets/datalake"
-    size: "90000"
+    size: "100000"
   spark:
     driverMemory: "5g"
     partitionSize: "1000"
@@ -30,10 +30,11 @@ belly-claws:
 bellyback-claws:
   image:
     repository: agriuseatstweets/bellyback
-    tag: 0.0.1
+    tag: 0.0.4
   schedule: "*/5 * * * *"
-  completions: 2
-  parallelism: 2
+  completions: 1
+  parallelism: 1
+  backoffLimit: 4
   resources:
     requests:
       memory: "512Mi"
@@ -42,6 +43,7 @@ bellyback-claws:
     queue: "kafka"
     topic: "tweets"
     kafkaBrokers: "agrius-kafka:9092"
+    kafkaPollInterval: "1920000"
   belly:
     location: "spain-tweets-backup"
     size: "80"
@@ -74,15 +76,17 @@ belly-jaws:
 bellyback-jaws:
   image:
     repository: agriuseatstweets/bellyback
-    tag: 0.0.1
+    tag: 0.0.4
   schedule: "0 0 * * *"
   completions: 1
   parallelism: 1
+  backoffLimit: 1
   keySecret: agrius-bellyback-keys
   queue:
     queue: "kafka"
     topic: "livetweets"
     kafkaBrokers: "agrius-kafka:9092"
+    kafkaPollInterval: "1920000"
   belly:
     location: "spain-tweets-backup"
     size: "80"
@@ -90,8 +94,8 @@ bellyback-jaws:
 claws:
   image:
     repository: agriuseatstweets/claws
-    tag: 0.0.6
-  schedule: "0 20 * * *"
+    tag: 0.0.7
+  schedule: "0 12 * * *"
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   queue:
