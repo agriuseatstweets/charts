@@ -36,7 +36,7 @@ spec:
               - name: BELLY_SIZE
                 value: "{{ .Values.belly.size }}"
               - name: LS_JAVA_OPTS
-                value: "-Xmx2048m -Xms256m"
+                value: "{{ .Values.java.opts }}"
             volumeMounts:
               - name: keys
                 mountPath: /usr/share/keys
