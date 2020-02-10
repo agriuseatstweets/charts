@@ -35,6 +35,8 @@ spec:
                 value: "{{ .Values.belly.location }}"
               - name: BELLY_SIZE
                 value: "{{ .Values.belly.size }}"
+              - name: BELLY_MINIMUM_SIZE
+                value: "{{ .Values.belly.minimumSize }}"
               - name: GOOGLE_APPLICATION_CREDENTIALS
                 value: "/home/jupyter/work/keys/key.json"
               - name: PARTITION_SIZE

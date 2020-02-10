@@ -23,6 +23,7 @@ queue: {}
 belly: {}
   # location: "gs://foo"
   # size: "90000"
+  # minimumSize: "0"
 spark:
   partitionSize: "10000"
   driverMemory: "4g"
