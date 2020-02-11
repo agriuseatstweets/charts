@@ -29,6 +29,8 @@ spec:
                 value: "{{ .Values.queue.kafkaPollInterval }}"
               - name: BELLY_TOPIC
                 value: "{{ .Values.queue.topic }}"
+              - name: BELLY_GROUP
+                value: "{{ .Values.queue.group }}"
               - name: GOOGLE_PROJECT_ID
                 value: "{{ .Values.queue.googleProjectId}}"
               - name: BELLY_LOCATION

@@ -3,7 +3,20 @@ entries:
   belly:
   - apiVersion: v2
     appVersion: 0.0.25
-    created: "2020-02-10T12:04:06.482367179+01:00"
+    created: "2020-02-11T23:45:08.638726577+01:00"
+    dependencies:
+    - name: common
+      repository: https://storage.googleapis.com/kubernetes-charts-incubator
+      version: 0.0.5
+    description: A Helm chart for Kubernetes
+    digest: 138b19b0ca6826b5aaa9a165a2b274c25722ba9bc1d8142170a5b8317ec21ce4
+    name: belly
+    urls:
+    - belly-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 0.0.25
+    created: "2020-02-11T23:45:08.637755738+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -16,7 +29,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: 0.0.19
-    created: "2020-02-10T12:04:06.478335786+01:00"
+    created: "2020-02-11T23:45:08.636503411+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -29,7 +42,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: 0.0.19
-    created: "2020-02-10T12:04:06.475764604+01:00"
+    created: "2020-02-11T23:45:08.634666294+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -42,7 +55,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: 0.0.19
-    created: "2020-02-10T12:04:06.472582628+01:00"
+    created: "2020-02-11T23:45:08.630822824+01:00"
     description: A Helm chart for Kubernetes
     digest: 83a0e452622b865b05d49dc3d20579ff0f82c5d0ed1ba6ab9534e865d5df2add
     name: belly
@@ -51,7 +64,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.10
-    created: "2020-02-10T12:04:06.471246305+01:00"
+    created: "2020-02-11T23:45:08.630143389+01:00"
     description: A Helm chart for Kubernetes
     digest: 872e7ed7450b9f8cea1a359f8e95ad90f18081c2a36e8ef2495404f50f321f09
     name: belly
@@ -61,7 +74,7 @@ entries:
   bellyback:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-02-10T12:04:06.487520023+01:00"
+    created: "2020-02-11T23:45:08.644128549+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -74,7 +87,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-02-10T12:04:06.4861341+01:00"
+    created: "2020-02-11T23:45:08.642554906+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -87,7 +100,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-02-10T12:04:06.484666467+01:00"
+    created: "2020-02-11T23:45:08.640802012+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -100,7 +113,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-02-10T12:04:06.483109127+01:00"
+    created: "2020-02-11T23:45:08.63928085+01:00"
     description: A Helm chart for Kubernetes
     digest: d0209668d83e481a759a7a0c9457179a5556b0277c9d9ed4a8c39cdabdaa15e8
     name: bellyback
@@ -110,7 +123,7 @@ entries:
   claws:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-02-10T12:04:06.488141149+01:00"
+    created: "2020-02-11T23:45:08.64478515+01:00"
     description: A Helm chart for Kubernetes
     digest: 095061e270cde07eb82e07bc22e08a6f2667f24d15fd490a1ab6413646686965
     name: claws
@@ -120,7 +133,7 @@ entries:
   jaws:
   - apiVersion: v2
     appVersion: 0.0.10
-    created: "2020-02-10T12:04:06.488685511+01:00"
+    created: "2020-02-11T23:45:08.645430668+01:00"
     description: A Helm chart for Kubernetes
     digest: 547492b699c69e4b3af6dce68bbb52beeb80daab81bfd1e515fe714b85767491
     name: jaws
@@ -130,7 +143,7 @@ entries:
   rehydrate:
   - apiVersion: v2
     appVersion: 0.0.6
-    created: "2020-02-10T12:04:06.490110308+01:00"
+    created: "2020-02-11T23:45:08.65198264+01:00"
     dependencies:
     - name: common
       repository: https://storage.googleapis.com/kubernetes-charts-incubator
@@ -141,4 +154,4 @@ entries:
     urls:
     - rehydrate-0.0.1.tgz
     version: 0.0.1
-generated: "2020-02-10T12:04:06.468626067+01:00"
+generated: "2020-02-11T23:45:08.629148932+01:00"
