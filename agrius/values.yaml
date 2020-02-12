@@ -5,15 +5,15 @@ tags:
 belly-claws:
   image:
     repository: agriuseatstweets/belly
-    tag: 0.0.22
-  schedule: "30 * * * *"
-  completions: 1
-  parallelism: 1
+    tag: 0.0.27
+  schedule: "5,35 * * * *"
+  completions: 2
+  parallelism: 2
   backoffLimit: 1
   resources:
     requests:
       cpu: "750m"
-      memory: "9Gi"
+      memory: "30Gi"
   keySecret: agrius-belly-keys
   queue:
     queue: "kafka"
@@ -21,11 +21,11 @@ belly-claws:
     kafkaBrokers: "agrius-kafka:9092"
     kafkaPollInterval: "1920000"
   belly:
-    location: "gs://spain-tweets/datalake"
-    size: "150000"
+    location: "gs://spain-tweets-warehouse"
+    size: "360000"
   spark:
-    driverMemory: "9g"
-    partitionSize: "1000"
+    driverMemory: "35g"
+    partitionSize: "2000"
 
 bellyback-claws:
   image:
@@ -51,15 +51,15 @@ bellyback-claws:
 belly-jaws:
   image:
     repository: agriuseatstweets/belly
-    tag: 0.0.21
-  schedule: "0 0 * * *"
+    tag: 0.0.27
+  schedule: "10 0 * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 1
   resources:
     requests:
       cpu: "1"
-      memory: "5Gi"
+      memory: "30Gi"
   keySecret: agrius-belly-keys
   queue:
     queue: "kafka"
@@ -67,11 +67,11 @@ belly-jaws:
     kafkaBrokers: "agrius-kafka:9092"
     kafkaPollInterval: "1920000"
   belly:
-    location: "gs://spain-tweets/datalake"
-    size: "100000"
+    location: "gs://spain-tweets-warehouse"
+    size: "360000"
   spark:
-    driverMemory: "5g"
-    partitionSize: "1000"
+    driverMemory: "35g"
+    partitionSize: "2000"
 
 bellyback-jaws:
   image:
@@ -95,7 +95,7 @@ claws:
   image:
     repository: agriuseatstweets/claws
     tag: 0.0.8
-  schedule: "0 6 * * *"
+  schedule: "0 4 * * *"
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
   queue:
@@ -152,11 +152,11 @@ kafka:
     "auto.leader.rebalance.enable": false
   topics:
     - name: tweets
-      config: "retention.ms=1209600000,compression.type=snappy" # 14 days
+      config: "retention.ms=1728000000,compression.type=snappy" # 20 days
       partitions: 8
       replicationFactor: 3
     - name: livetweets
-      config: "retention.ms=1209600000,compression.type=snappy" # 14 days
+      config: "retention.ms=1728000000,compression.type=snappy" # 20 days
       partitions: 1
       replicationFactor: 3
   persistence:
