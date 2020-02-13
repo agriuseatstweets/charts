@@ -1,50 +1,29 @@
 belly:
   image:
-    repository: agriuseatstweets/belly
-    tag: 0.0.23
-  schedule: "5,25,50 * * * *"
-  completions: 6
-  parallelism: 6
-  backoffLimit: 1
+    repository: agriuseatstweets/bellygo
+    tag: 0.0.3
+  schedule: "*/10 * * * *"
+  completions: 4
+  parallelism: 4
+  backoffLimit: 5
   resources:
     requests:
       cpu: "1000m"
-      memory: "30Gi"
-  keySecret: agrius-belly-keys
-  queue:
-    queue: "kafka"
-    topic: "tweets"
-    kafkaBrokers: "hydra-kafka:9092"
-    kafkaPollInterval: "1920000"
-  belly:
-    location: "gs://spain-tweets/datalake"
-    size: "360000"
-  spark:
-    driverMemory: "35g"
-    partitionSize: "2000"
-
-bellyback:
-  image:
-    repository: agriuseatstweets/bellyback
-    tag: 0.0.4
-  schedule: "*/3 * * * *"
-  completions: 5
-  parallelism: 5
-  backoffLimit: 2
-  resources:
-    requests:
       memory: "2Gi"
-  keySecret: agrius-bellyback-keys
-  queue:
-    queue: "kafka"
-    topic: "tweets"
-    kafkaBrokers: "hydra-kafka:9092"
-    kafkaPollInterval: "1920000"
-  java:
-    opts: "-Xmx3072m -Xms256m"
-  belly:
-    location: "spain-tweets-backup"
-    size: "100"
+  keySecret: agrius-belly-keys
+  env:
+    - name: BELLY_TOPIC
+      value: "tweets"
+    - name: BELLY_LOCATION
+      value: "spain-tweets-datalake"
+    - name: BELLY_SIZE
+      value: "360000"
+    - name: BELLY_GROUP
+      value: "belly"
+    - name: KAFKA_BROKERS
+      value: "hydra-kafka:9092"
+    - name: KAFKA_POLL_TIMEOUT
+      value: "600s"
 
 kafka:
   replicas: 6
@@ -61,12 +40,16 @@ kafka:
     "auto.leader.rebalance.enable": false
   topics:
     - name: tweets
-      config: "retention.ms=864000000,compression.type=snappy" # 10 days
+      config: "retention.ms=1728000000,compression.type=snappy" # 20 days
       partitions: 12
       replicationFactor: 3
     - name: ubdata
       config: "retention.ms=432000000,compression.type=snappy" # 5 days
       partitions: 12
+      replicationFactor: 2
+    - name: dig
+      config: "retention.ms=432000000" # 5 days
+      partitions: 4
       replicationFactor: 2
   persistence:
     size: "1000Gi"
