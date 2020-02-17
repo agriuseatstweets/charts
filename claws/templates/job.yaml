@@ -8,6 +8,8 @@ spec:
     spec:
       completions: {{ .Values.completions }}
       parallelism: {{ .Values.parallelism }}
+      backoffLimit: {{ .Values.backoffLimit }}
+      activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
       template:
         spec:
           restartPolicy: OnFailure
