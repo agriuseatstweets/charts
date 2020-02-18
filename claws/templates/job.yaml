@@ -34,6 +34,8 @@ spec:
                 value: "{{ .Values.queue.kafkaBrokers }}"
               - name: PUB_TOPIC
                 value: "{{ .Values.queue.topic }}"
+              - name: DIG_TOPIC
+                value: "{{ .Values.queue.digTopic }}"
               - name: CLAWS_SHEET_ID
                 value: "{{ .Values.sheets.sheetId }}"
               - name: CLAWS_SHEET_USERS
