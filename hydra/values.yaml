@@ -2,14 +2,14 @@ belly:
   image:
     repository: agriuseatstweets/bellygo
     tag: 0.0.3
-  schedule: "*/10 * * * *"
-  completions: 4
-  parallelism: 4
+  schedule: "*/8 * * * *"
+  completions: 1
+  parallelism: 1
   backoffLimit: 5
   resources:
     requests:
       cpu: "1000m"
-      memory: "2Gi"
+      memory: "1Gi"
   keySecret: agrius-belly-keys
   env:
     - name: BELLY_TOPIC
@@ -40,7 +40,7 @@ kafka:
     "auto.leader.rebalance.enable": false
   topics:
     - name: tweets
-      config: "retention.ms=1728000000,compression.type=snappy" # 20 days
+      config: "retention.ms=604800000,compression.type=snappy" # 7 days
       partitions: 12
       replicationFactor: 3
     - name: ubdata
@@ -48,7 +48,7 @@ kafka:
       partitions: 12
       replicationFactor: 2
     - name: dig
-      config: "retention.ms=432000000" # 5 days
+      config: "retention.ms=2678400000" # 31 days
       partitions: 4
       replicationFactor: 2
   persistence:
@@ -75,3 +75,58 @@ kafka:
                values:
                  - zookeeper
            topologyKey: "kubernetes.io/hostname"
+
+  prometheus:
+    ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+    jmx:
+      enabled: true
+      ## Port jmx-exporter exposes Prometheus format metrics to scrape
+      port: 5556
+
+    kafka:
+      enabled: true
+      ## Port kafka-exporter exposes for Prometheus to scrape metrics
+      port: 9308
+
+    operator:
+      ## Are you using Prometheus Operator?
+      enabled: true
+      serviceMonitor:
+        namespace: monitoring
+        selector:
+          heritage: Helm
+          release: prometheus
+
+      prometheusRule:
+        ## Add Prometheus Rules?
+        enabled: true
+        ## Namespace in which to install the PrometheusRule resource.
+        namespace: monitoring
+        # Use release namespace instead
+        releaseNamespace: false
+
+        ## Defaults to whats used if you follow CoreOS [Prometheus Install Instructions](https://github.com/coreos/prometheus-operator/tree/master/helm#tldr)
+        ## [Prometheus Selector Label](https://github.com/coreos/prometheus-operator/blob/master/helm/prometheus/templates/prometheus.yaml#L65)
+        ## [Kube Prometheus Selector Label](https://github.com/coreos/prometheus-operator/blob/master/helm/kube-prometheus/values.yaml#L298)
+        selector:
+          heritage: Helm
+          release: prometheus
+          prometheus: null
+
+        ## Some example rules.
+        ## e.g. max(kafka_controller_kafkacontroller_activecontrollercount_value{service="my-kafka-release"}) by (service) < 1
+        rules:
+        - alert: KafkaNoActiveControllers
+          annotations:
+            message: The number of active controllers in {{ "{{" }} $labels.namespace {{ "}}" }} is less than 1. This usually means that some of the Kafka nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one whilst monitoring the under-replicated partitions graph).
+          expr: max(kafka_controller_kafkacontroller_activecontrollercount_value) by (namespace) < 1
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KafkaMultipleActiveControllers
+          annotations:
+            message: The number of active controllers in {{ "{{" }} $labels.namespace {{ "}}" }} is greater than 1. This usually means that some of the Kafka nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one whilst monitoring the under-replicated partitions graph).
+          expr: max(kafka_controller_kafkacontroller_activecontrollercount_value) by (namespace) > 1
+          for: 5m
+          labels:
+            severity: critical

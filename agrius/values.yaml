@@ -4,104 +4,72 @@ tags:
 
 belly-claws:
   image:
-    repository: agriuseatstweets/belly
-    tag: 0.0.27
-  schedule: "5,35 * * * *"
-  completions: 2
-  parallelism: 2
-  backoffLimit: 1
-  resources:
-    requests:
-      cpu: "750m"
-      memory: "30Gi"
-  keySecret: agrius-belly-keys
-  queue:
-    queue: "kafka"
-    topic: "tweets"
-    kafkaBrokers: "agrius-kafka:9092"
-    kafkaPollInterval: "1920000"
-  belly:
-    location: "gs://spain-tweets-warehouse"
-    size: "360000"
-  spark:
-    driverMemory: "35g"
-    partitionSize: "2000"
-
-bellyback-claws:
-  image:
-    repository: agriuseatstweets/bellyback
+    repository: agriuseatstweets/bellygo
     tag: 0.0.4
-  schedule: "*/20 * * * *"
+  schedule: "0 */2 * * *"
   completions: 1
   parallelism: 1
-  backoffLimit: 4
+  backoffLimit: 5
   resources:
     requests:
+      cpu: "1000m"
       memory: "1Gi"
-  keySecret: agrius-bellyback-keys
-  queue:
-    queue: "kafka"
-    topic: "tweets"
-    kafkaBrokers: "agrius-kafka:9092"
-    kafkaPollInterval: "1920000"
-  belly:
-    location: "spain-tweets-backup"
-    size: "80"
+  keySecret: agrius-belly-keys
+  env:
+    - name: BELLY_TOPIC
+      value: "tweets"
+    - name: BELLY_LOCATION
+      value: "spain-tweets-datalake"
+    - name: BELLY_SIZE
+      value: "360000"
+    - name: BELLY_GROUP
+      value: "belly"
+    - name: KAFKA_BROKERS
+      value: "kafka-headless:29092"
+    - name: KAFKA_POLL_TIMEOUT
+      value: "600s"
+
 
 belly-jaws:
   image:
-    repository: agriuseatstweets/belly
-    tag: 0.0.27
+    repository: agriuseatstweets/bellygo
+    tag: 0.0.4
   schedule: "10 0 * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 1
   resources:
     requests:
-      cpu: "1"
-      memory: "30Gi"
+      cpu: "1000m"
+      memory: "1Gi"
   keySecret: agrius-belly-keys
-  queue:
-    queue: "kafka"
-    topic: "livetweets"
-    kafkaBrokers: "agrius-kafka:9092"
-    kafkaPollInterval: "1920000"
-  belly:
-    location: "gs://spain-tweets-warehouse"
-    size: "360000"
-  spark:
-    driverMemory: "35g"
-    partitionSize: "2000"
-
-bellyback-jaws:
-  image:
-    repository: agriuseatstweets/bellyback
-    tag: 0.0.4
-  schedule: "0 */12 * * *"
-  completions: 1
-  parallelism: 1
-  backoffLimit: 1
-  keySecret: agrius-bellyback-keys
-  queue:
-    queue: "kafka"
-    topic: "livetweets"
-    kafkaBrokers: "agrius-kafka:9092"
-    kafkaPollInterval: "1920000"
-  belly:
-    location: "spain-tweets-backup"
-    size: "80"
+  env:
+    - name: BELLY_TOPIC
+      value: "livetweets"
+    - name: BELLY_LOCATION
+      value: "spain-tweets-datalake"
+    - name: BELLY_SIZE
+      value: "360000"
+    - name: BELLY_GROUP
+      value: "belly"
+    - name: KAFKA_BROKERS
+      value: "kafka-headless:29092"
+    - name: KAFKA_POLL_TIMEOUT
+      value: "600s"
 
 claws:
   image:
     repository: agriuseatstweets/claws
-    tag: 0.0.8
-  schedule: "0 4 * * *"
+    tag: 0.0.9
+  schedule: "10 0 * * *"
   envSecret: agrius-jaws-envs
   keySecret: agrius-jaws-keys
+  activeDeadlineSeconds: 86040
   queue:
     queue: "kafka"
-    kafkaBrokers: "agrius-kafka:9092"
+    kafkaBrokers: "kafka-headless:29092"
     topic: "tweets"
+    digTopic: "dig"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
@@ -111,7 +79,7 @@ claws:
   resources:
     requests:
       cpu: "100m"
-      memory: "512Mi"
+      memory: "128Mi"
 
 jaws:
   image:
@@ -122,7 +90,7 @@ jaws:
   refreshInterval: "30"
   queue:
     queue: "kafka"
-    kafkaBrokers: "agrius-kafka:9092"
+    kafkaBrokers: "kafka-headless:29092"
     topic: "livetweets"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
@@ -131,131 +99,118 @@ jaws:
     urls: "follows!B2:B"
     locations: "follows!E2:E"
   java:
-    toolOptions: "-Xms256m -Xmx1024m -XX:MaxGCPauseMillis=1000"
+    toolOptions: "-Xms256m -Xmx4096m -XX:MaxGCPauseMillis=1000"
   resources:
     requests:
       cpu: "100m"
       memory: "512Mi"
 
-kafka:
-  replicas: 3
-  imageTag: 5.4.0
-  resources:
-    requests:
-      cpu: 100m
-      memory: 6Gi
-  kafkaHeapOptions: "-Xmx4G -Xms1G"
-  configurationOverrides:
-    "offsets.topic.replication.factor": 3
-    "group.initial.rebalance.delay.ms": 20000
-    "auto.create.topics.enable": false
-    "auto.leader.rebalance.enable": false
-  topics:
-    - name: tweets
-      config: "retention.ms=1728000000,compression.type=snappy" # 20 days
-      partitions: 8
-      replicationFactor: 3
-    - name: livetweets
-      config: "retention.ms=1728000000,compression.type=snappy" # 20 days
-      partitions: 1
-      replicationFactor: 3
-  persistence:
-    size: "500Gi"
-    storageClass: "pd-ssd"
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app
-            operator: In
-            values:
-            - kafka
-        topologyKey: "kubernetes.io/hostname"
-    podAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-       - weight: 50
-         podAffinityTerm:
-           labelSelector:
-             matchExpressions:
-             - key: app
-               operator: In
-               values:
-                 - zookeeper
-           topologyKey: "kubernetes.io/hostname"
+kafka-exporter:
+  kafkaExporter:
+    kafka:
+      servers:
+        - kafka-headless:29092
 
 
-logstash:
-  keySecret: agrius-logstash-keys
-  persistence: {}
-  # storageClass: europe-ssd-bcd
-  pubsub:
-    projectid: "trollhunters"
-    topic: "agrius-spain"
-    subscription: "agrius-spain-logstash"
 
-elasticsearch:
-  cluster:
-    name: "elasticsearch"
-    xpackEnable: false
-    config: {}
-    additionalJavaOpts: ""
-    bootstrapShellCommand: ""
-    env:
-      MINIMUM_MASTER_NODES: "1"
+# kafka:
+#   replicas: 3
+#   imageTag: 5.4.0
+#   resources:
+#     requests:
+#       cpu: 100m
+#       memory: 4Gi
+#   kafkaHeapOptions: "-Xmx4G -Xms1G"
+#   configurationOverrides:
+#     "offsets.topic.replication.factor": 3
+#     "group.initial.rebalance.delay.ms": 20000
+#     "auto.create.topics.enable": false
+#     "auto.leader.rebalance.enable": false
+#   topics:
+#     - name: tweets
+#       config: "retention.ms=1728000000,compression.type=snappy" # 20 days
+#       partitions: 8
+#       replicationFactor: 3
+#     - name: livetweets
+#       config: "retention.ms=1728000000,compression.type=snappy" # 20 days
+#       partitions: 1
+#       replicationFactor: 3
+#   persistence:
+#     size: "500Gi"
+#     storageClass: "pd-ssd"
+#   affinity:
+#     podAntiAffinity:
+#       requiredDuringSchedulingIgnoredDuringExecution:
+#       - labelSelector:
+#           matchExpressions:
+#           - key: app
+#             operator: In
+#             values:
+#             - kafka
+#         topologyKey: "kubernetes.io/hostname"
+#     podAffinity:
+#       preferredDuringSchedulingIgnoredDuringExecution:
+#        - weight: 50
+#          podAffinityTerm:
+#            labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                  - zookeeper
+#            topologyKey: "kubernetes.io/hostname"
 
-  client:
-    # replicas: 2
-    # heapSize: "256m"
+#   prometheus:
+#     ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+#     jmx:
+#       enabled: true
+#       ## Port jmx-exporter exposes Prometheus format metrics to scrape
+#       port: 5556
 
-  master:
-    name: master
-    exposeHttp: false
-    replicas: 2
-    # heapSize: "256m"
-    persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      name: data
-      # size: "4Gi"
-      # storageClass: europe-ssd-bcd
+#     kafka:
+#       enabled: true
+#       ## Port kafka-exporter exposes for Prometheus to scrape metrics
+#       port: 9308
 
+#     operator:
+#       ## Are you using Prometheus Operator?
+#       enabled: true
+#       serviceMonitor:
+#         namespace: monitoring
+#         selector:
+#           heritage: Helm
+#           release: prometheus
 
-  data:
-    name: data
-    exposeHttp: false
-    replicas: 1
-    # heapSize: "512m"
-    persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      name: data
-      # size: "100Gi"
-      # storageClass: europe-ssd-bcd
-    # resources:
-    #   limits:
-    #     cpu: "1"
-    #   requests:
-    #     cpu: "25m"
-    #     memory: "512Mi"
+#       prometheusRule:
+#         ## Add Prometheus Rules?
+#         enabled: true
+#         ## Namespace in which to install the PrometheusRule resource.
+#         namespace: monitoring
+#         # Use release namespace instead
+#         releaseNamespace: false
 
-kibana:
-  env:
-    ELASTICSEARCH_URL: "http://ag-elasticsearch-client.default.svc.cluster.local:9200"
+#         ## Defaults to whats used if you follow CoreOS [Prometheus Install Instructions](https://github.com/coreos/prometheus-operator/tree/master/helm#tldr)
+#         ## [Prometheus Selector Label](https://github.com/coreos/prometheus-operator/blob/master/helm/prometheus/templates/prometheus.yaml#L65)
+#         ## [Kube Prometheus Selector Label](https://github.com/coreos/prometheus-operator/blob/master/helm/kube-prometheus/values.yaml#L298)
+#         selector:
+#           heritage: Helm
+#           release: prometheus
+#           prometheus: null
 
-  # ingress:
-    # enabled: true
-    # hosts:
-    #   - agrius.nandan.cloud
-    # annotations:
-    #   certmanager.k8s.io/cluster-issuer: letsencrypt-prod
-    # tls:
-    #   - secretName: agrius-kibana-cert
-    #     hosts:
-    #       - agrius.nandan.cloud
-
-  files:
-    kibana.yml:
-      elasticsearch.url: "http://ag-elasticsearch-client.default.svc.cluster.local:9200"
-      elasticsearch:
-        requestTimeout: 60000
+#         ## Some example rules.
+#         ## e.g. max(kafka_controller_kafkacontroller_activecontrollercount_value{service="my-kafka-release"}) by (service) < 1
+#         rules:
+#         - alert: KafkaNoActiveControllers
+#           annotations:
+#             message: The number of active controllers in {{ "{{" }} $labels.namespace {{ "}}" }} is less than 1. This usually means that some of the Kafka nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one whilst monitoring the under-replicated partitions graph).
+#           expr: max(kafka_controller_kafkacontroller_activecontrollercount_value) by (namespace) < 1
+#           for: 5m
+#           labels:
+#             severity: critical
+#         - alert: KafkaMultipleActiveControllers
+#           annotations:
+#             message: The number of active controllers in {{ "{{" }} $labels.namespace {{ "}}" }} is greater than 1. This usually means that some of the Kafka nodes aren't communicating properly. If it doesn't resolve itself you can try killing the pods (one by one whilst monitoring the under-replicated partitions graph).
+#           expr: max(kafka_controller_kafkacontroller_activecontrollercount_value) by (namespace) > 1
+#           for: 5m
+#           labels:
+#             severity: critical

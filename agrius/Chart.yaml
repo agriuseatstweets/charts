@@ -8,29 +8,19 @@ dependencies:
     version: 0.0.1
     repository: https://agriuseatstweets.github.io/charts
   - name: claws
-    version: 0.0.1
+    version: 0.0.3
     repository: https://agriuseatstweets.github.io/charts
   - name: belly
     alias: belly-claws
-    version: 0.0.6
+    version: 0.0.10
     repository: https://agriuseatstweets.github.io/charts
   - name: belly
     alias: belly-jaws
-    version: 0.0.6
+    version: 0.0.10
     repository: https://agriuseatstweets.github.io/charts
-  - name: bellyback
-    alias: bellyback-jaws
-    version: 0.0.4
+  - name: kafka-exporter
+    version: 1.0.0
     repository: https://agriuseatstweets.github.io/charts
-  - name: bellyback
-    alias: bellyback-claws
-    version: 0.0.4
-    repository: https://agriuseatstweets.github.io/charts
-  - name: kafka
-    version: 0.20.8
-    repository: https://storage.googleapis.com/kubernetes-charts-incubator
-    tags:
-      - kafka
   - name: elasticsearch
     version: 1.24.0
     repository: https://kubernetes-charts.storage.googleapis.com
