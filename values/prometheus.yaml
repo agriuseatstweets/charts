@@ -1,0 +1,42 @@
+defaultRules:
+  create: true
+  rules:
+    alertmanager: true
+    etcd: true
+    general: true
+    k8s: true
+    kubeApiserver: true
+    kubePrometheusNodeAlerting: true
+    kubePrometheusNodeRecording: true
+    kubernetesAbsent: false
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: false
+    kubeScheduler: true
+    network: true
+    node: true
+    prometheus: true
+    prometheusOperator: true
+    time: true
+
+coreDns:
+  enabled: false
+
+kubeDns:
+  enabled: true
+
+alertmanager:
+  alertmanagerSpec:
+    useExistingSecret: true
+    configSecret: "alertmanager"
+
+prometheus:
+  prometheusSpec:
+    # Target ALL ServiceMonitors and PrometheusRules
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelector: {}
+    serviceMonitorSelector: {}
+    podMonitorSelector: {}
