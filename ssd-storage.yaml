@@ -5,3 +5,5 @@ metadata:
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
