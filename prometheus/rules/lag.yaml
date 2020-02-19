@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-kafka-lagging
+  labels:
+    ksonnet.io/component: prometheus-rules
+    prometheus: k8s
+    role: alert-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: Kafka consumer is lagging
+    interval: 1m
+    rules:
+      - record: kafka:producer_offset_max
+        expr: sum without (partition) (max(kafka_offset) by (instance, cluster, partition, topic, env))
+      - record: kafka:consumer_offset_min
+        expr: sum without (partition) (min(cg_kafka_offset) by (instance, cluster, partition, topic, env))
+      - record: kafka:consumer_rate
+        expr: sum(rate(cg_kafka_offset[5m])) by (instance, cluster, topic, env)
+      - record: kafka:consumer_lag
+        expr: kafka:producer_offset_max - kafka:consumer_offset_min
+      - record: kafka:consumer_lag_seconds
+        expr: kafka:consumer_lag / kafka:consumer_rate
+      - alert: KafkaConsumerLagSeconds
+        expr: |
+          kafka:consumer_lag{env="prod"} > 200000
+          or
+          kafka:consumer_lag_seconds{env="prod"} > 180
+        for: 5m
+        labels:
+          severity: warning
+          component: stream-processor
+        annotations:
+          summary: |
+            Kafka consumer lag is more than 3 minutes or offset difference more than 200k for 5 minutes
+          description: |
+            Kafka consumer on cluster {$labels.cluster} topic {$labels.topic} env {$labels.env} is lagging:
+            Current time lag is { with printf "kafka:consumer_lag_seconds{cluster='%s',topic='%s'}" $labels.cluster $labels.topic | query }{ . | first | value | humanizeDuration }{ end }.
+            Current offset diff is { with printf "kafka:consumer_lag{cluster='%s',topic='%s'}" $labels.cluster $labels.topic | query }{ . | first | value | humanize }{ end }.

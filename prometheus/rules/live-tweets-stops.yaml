@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-agrius-live-tweets-stopped
+  labels:
+    heritage: Helm
+    release: prometheus
+  namespace: monitoring
+spec:
+  groups:
+  - name: Live Tweets has stopped
+    interval: 1m
+    rules:
+      - alert: AgriusLiveTweetsStopped
+        expr: |
+          rate(kafka_topic_partition_current_offset{topic="livetweets"}[5m]) < 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: |
+            Live tweets topic has seemingly stopped.
+          description: |
+            Live tweets topic has seemingly stopped.

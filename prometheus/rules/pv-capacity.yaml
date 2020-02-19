@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-pvc-capacity
+  labels:
+    prometheus: kube-prometheus
+    role: alert-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: PVC is reaching capacity
+    interval: 10m
+    rules:
+      - alert: PVCHighCapacity
+        expr: |
+          count (max by (persistentvolumeclaim,namespace) (kubelet_volume_stats_used_bytes ) and (max by (persistentvolumeclaim,namespace) (kubelet_volume_stats_used_bytes )) / (max by (persistentvolumeclaim,namespace) (kubelet_volume_stats_capacity_bytes )) >= (70 / 100)) or vector (0)
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: |
+            PVC is over 70% capacity for 10 minutes
+          description: |
+            PVC is over 70% capacity for 10 minutes
