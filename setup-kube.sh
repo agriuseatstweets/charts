@@ -57,5 +57,6 @@ helm install --namespace monitoring prometheus stable/prometheus-operator -f val
 helm install zookeeper-operator banzaicloud-stable/zookeeper-operator
 helm install kafka-operator banzaicloud-stable/kafka-operator
 
-
-
+# wait for kafka-operator to be ready and make kafka/zk cluster
+sleep 30
+kubectl apply -f ./kafka-operator/prod
