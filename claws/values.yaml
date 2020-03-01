@@ -13,3 +13,4 @@ sheets: {}
 resources: {}
 redis: {}
 tokens: {}
+config: {}

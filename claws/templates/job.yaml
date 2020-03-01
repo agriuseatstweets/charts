@@ -46,6 +46,8 @@ spec:
                 value: "{{ .Values.sheets.urls }}"
               - name: CLAWS_SHEET_LOCATIONS
                 value: "{{ .Values.sheets.locations }}"
+              - name: CLAWS_DAY_OFFSET
+                value: "{{ .Values.config.dayOffset }}"
               - name: REDIS_HOST
                 value: "{{ .Values.redis.host }}"
               - name: BEAST_LOCATION

@@ -2,4 +2,4 @@ apiVersion: v2
 appVersion: "0.0.1"
 description: A Helm chart for Kubernetes
 name: claws
-version: 0.0.4
+version: 0.0.5
