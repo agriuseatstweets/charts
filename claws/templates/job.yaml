@@ -46,6 +46,10 @@ spec:
                 value: "{{ .Values.sheets.urls }}"
               - name: CLAWS_SHEET_LOCATIONS
                 value: "{{ .Values.sheets.locations }}"
+              - name: REDIS_HOST
+                value: "{{ .Values.redis.host }}"
+              - name: BEAST_LOCATION
+                value: "{{ .Values.tokens.bucket }}"
             volumeMounts:
               - name: keys
                 mountPath: /app/keys

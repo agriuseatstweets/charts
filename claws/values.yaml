@@ -11,3 +11,5 @@ queue: {}
 google: {}
 sheets: {}
 resources: {}
+redis: {}
+tokens: {}
