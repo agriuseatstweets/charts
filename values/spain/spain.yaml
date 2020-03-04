@@ -93,7 +93,7 @@ belly-jaws:
 claws:
   image:
     repository: agriuseatstweets/claws
-    tag: 0.0.19
+    tag: 0.0.24
   schedule: "10 1 * * *"
   envSecret: spain-agrius-claws-envs
   keySecret: spain-agrius-claws-keys
