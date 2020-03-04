@@ -15,6 +15,7 @@ spec:
           containers:
           - name: {{ .Chart.Name }}
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            terminationMessagePolicy: FallbackToLogsOnError
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             resources:
               {{- toYaml .Values.resources | nindent 14}}
