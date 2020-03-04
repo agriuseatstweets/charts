@@ -13,16 +13,16 @@ spec:
   clusterImage: "wurstmeister/kafka:2.12-2.3.0"
   readOnlyConfig: |
     offsets.topic.replication.factor=3
-    group.initial.rebalance.delay.ms=20000
+    group.initial.rebalance.delay.ms=10000
     auto.create.topics.enable=false
-    
+
   brokerConfigGroups:
     default:
-      resourceRequirements: 
+      resourceRequirements:
         requests:
           cpu: "250m"
-          memory: "2Gi"
-        
+          memory: "4Gi"
+
       storageConfigs:
         - mountPath: "/kafka-logs"
           pvcSpec:
@@ -30,8 +30,8 @@ spec:
               - ReadWriteOnce
             resources:
               requests:
-                storage: 50Gi
-            storageClassName: pd-ssd
+                storage: 100Gi
+            storageClassName: standard
   brokers:
     - id: 0
       brokerConfigGroup: "default"
@@ -56,13 +56,33 @@ spec:
   cruiseControlConfig:
     cruiseControlTaskSpec:
       RetryDurationMinutes: 5
-    resourceRequirements: 
+    resourceRequirements:
       requests:
         cpu: "25m"
         memory: "100m"
     topicConfig:
       partitions: 6
       replicationFactor: 2
+    clusterConfig: |
+      {
+        "min.insync.replicas": 3
+      }
+    capacityConfig: |
+      {
+        "brokerCapacities":[
+          {
+            "brokerId": "-1",
+            "capacity": {
+              "DISK": "100000",
+              "CPU": "100",
+              "NW_IN": "10000",
+              "NW_OUT": "10000"
+            },
+            "doc": "This is the default capacity. Capacity unit used for disk is in MB, cpu is in percentage, network throughput is in KB."
+          }
+        ]
+      }
+
     config: |
       # Copyright 2017 LinkedIn Corp. Licensed under the BSD 2-Clause License (the "License"). See License in the project root for license information.
       #
@@ -248,22 +268,3 @@ spec:
       webserver.accesslog.path=access.log
       # HTTP Request Log retention days
       webserver.accesslog.retention.days=14
-    clusterConfig: |
-      {
-        "min.insync.replicas": 3
-      }
-    capacityConfig: |
-      {
-        "brokerCapacities":[
-          {
-            "brokerId": "-1",
-            "capacity": {
-              "DISK": "500000",
-              "CPU": "100",
-              "NW_IN": "10000",
-              "NW_OUT": "10000"
-            },
-            "doc": "This is the default capacity. Capacity unit used for disk is in MB, cpu is in percentage, network throughput is in KB."
-          }
-        ]
-      }

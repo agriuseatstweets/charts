@@ -1,0 +1,91 @@
+tags:
+  dashboard: false
+  monitoring: true
+  redis: true
+  streaming: false
+  search: true
+
+redis:
+  cluster:
+    enabled: false
+  usePassword: false
+  master:
+    persistence:
+      size: 1Gi
+    resources:
+      requests:
+        memory: 10Mi
+        cpu: 10m
+  metrics:
+    enabled: true
+
+kafkaTopics:
+  - name: corona-tweets
+    partitions: 2
+    replicationFactor: 2
+    config:
+      "retention.ms": "432000000" # 5 days
+      "compression.type": "snappy"
+  - name: corona-dig
+    partitions: 1
+    replicationFactor: 2
+    config:
+      "retention.ms": "5184000000" # 60 days
+      "compression.type": "snappy"
+
+belly-claws:
+  image:
+    repository: agriuseatstweets/bellygo
+    tag: 0.0.5
+  schedule: "30 21 * * *"
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "500Mi"
+  keySecret: corona-agrius-belly-keys
+  env:
+    - name: BELLY_TOPIC
+      value: "corona-tweets"
+    - name: BELLY_LOCATION
+      value: "corona-tweets-datalake"
+    - name: BELLY_SIZE
+      value: "300000"
+    - name: BELLY_GROUP
+      value: "corona-belly"
+    - name: KAFKA_BROKERS
+      value: "kafka-headless.default.svc.cluster.local:29092"
+    - name: KAFKA_POLL_TIMEOUT
+      value: "600s"
+
+claws:
+  image:
+    repository: agriuseatstweets/claws
+    tag: 0.0.23
+  schedule: "15 19 * * *"
+  envSecret: corona-agrius-claws-envs
+  keySecret: corona-agrius-claws-keys
+  activeDeadlineSeconds: 86040
+  config:
+    dayOffset: 5
+  tokens:
+    bucket: "trollhunters-beaststore"
+  redis:
+    host: "corona-agrius-redis-headless:6379"
+  queue:
+    queue: "kafka"
+    kafkaBrokers: "kafka-headless.default.svc.cluster.local:29092"
+    topic: "corona-tweets"
+    digTopic: "corona-dig"
+  sheets:
+    sheetId: "1QFXpibMeAxe-f9qw-1y9Lj9ZuzOTcInpRH_aNP00Rug"
+    users: "follows!D2:D"
+    hashtags: "follows!C2:C"
+    urls: "follows!B2:B"
+    locations: "follows!F2:F"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"

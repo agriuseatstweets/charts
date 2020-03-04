@@ -92,8 +92,8 @@ belly-jaws:
 claws:
   image:
     repository: agriuseatstweets/claws
-    tag: 0.0.19
-  schedule: "6 * * * *"
+    tag: 0.0.21
+  schedule: "51 * * * *"
   envSecret: agrius-claws-envs
   keySecret: agrius-claws-keys
   tokens:

@@ -12,22 +12,25 @@ dependencies:
   - name: jaws
     version: 0.0.1
     repository: https://agriuseatstweets.github.io/charts
+    tags:
+      - streaming
   - name: claws
-    version: 0.0.4
+    version: 0.0.5
     repository: https://agriuseatstweets.github.io/charts
+    tags:
+      - search
   - name: belly
     alias: belly-claws
     version: 0.0.10
     repository: https://agriuseatstweets.github.io/charts
+    tags:
+      - search
   - name: belly
     alias: belly-jaws
     version: 0.0.10
     repository: https://agriuseatstweets.github.io/charts
-  - name: kafka-exporter
-    version: 1.0.0
-    repository: https://agriuseatstweets.github.io/charts
     tags:
-      - monitoring
+      - streaming
   - name: elasticsearch
     version: 1.24.0
     repository: https://kubernetes-charts.storage.googleapis.com

@@ -11,56 +11,55 @@ redis:
   usePassword: false
   master:
     persistence:
-      size: 2Gi
+      size: 1Gi
   metrics:
     enabled: true
 
-kafkaCluster:
-  topics:
-    livetweets:
-      partitions: 1
-      replicationFactor: 3
-      config:
-        "retention.ms": "1728000000"
-        "compression.type": "snappy"
-    tweets:
-      partitions: 8
-      replicationFactor: 3
-      config:
-        "retention.ms": "1728000000"
-        "compression.type": "snappy"
-    dig:
-      partitions: 1
-      replicationFactor: 3
-      config:
-        "retention.ms": "5184000000" # 60 days
-        "compression.type": "snappy"
 
+kafkaTopics:
+  - name: spain-tweets
+    partitions: 2
+    replicationFactor: 2
+    config:
+      "retention.ms": "432000000" # 5 days
+      "compression.type": "snappy"
+  - name: spain-livetweets
+    partitions: 1
+    replicationFactor: 2
+    config:
+      "retention.ms": "432000000" # 5 days
+      "compression.type": "snappy"
+  - name: spain-dig
+    partitions: 1
+    replicationFactor: 2
+    config:
+      "retention.ms": "5184000000" # 60 days
+      "compression.type": "snappy"
 
 belly-claws:
   image:
     repository: agriuseatstweets/bellygo
     tag: 0.0.5
-  schedule: "12 15 * * *"
-  completions: 1
+  schedule: "15 21 * * *"
+  completions: 8
   parallelism: 1
   backoffLimit: 5
   resources:
     requests:
       cpu: "500m"
       memory: "1Gi"
-  keySecret: agrius-belly-keys
+  keySecret: spain-agrius-belly-keys
   env:
     - name: BELLY_TOPIC
-      value: "tweets"
+      value: "spain-tweets"
     - name: BELLY_LOCATION
       value: "spain-tweets-datalake"
     - name: BELLY_SIZE
       value: "360000"
     - name: BELLY_GROUP
-      value: "belly"
+      value: "spain-belly"
     - name: KAFKA_BROKERS
-      value: "kafka-headless:29092"
+      value: "kafka-headless.default.svc.cluster.local:29092"
     - name: KAFKA_POLL_TIMEOUT
       value: "600s"
 
@@ -68,7 +67,7 @@ belly-jaws:
   image:
     repository: agriuseatstweets/bellygo
     tag: 0.0.5
-  schedule: "20 21 * * *"
+  schedule: "10 0 * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 1
@@ -76,18 +75,18 @@ belly-jaws:
     requests:
       cpu: "500m"
       memory: "1Gi"
-  keySecret: agrius-belly-keys
+  keySecret: spain-agrius-belly-keys
   env:
     - name: BELLY_TOPIC
-      value: "livetweets"
+      value: "spain-livetweets"
     - name: BELLY_LOCATION
       value: "spain-tweets-datalake"
     - name: BELLY_SIZE
       value: "360000"
     - name: BELLY_GROUP
-      value: "belly"
+      value: "spain-belly"
     - name: KAFKA_BROKERS
-      value: "kafka-headless:29092"
+      value: "kafka-headless.default.svc.cluster.local:29092"
     - name: KAFKA_POLL_TIMEOUT
       value: "600s"
 
@@ -96,20 +95,20 @@ claws:
     repository: agriuseatstweets/claws
     tag: 0.0.19
   schedule: "10 1 * * *"
-  envSecret: agrius-claws-envs
-  keySecret: agrius-claws-keys
+  envSecret: spain-agrius-claws-envs
+  keySecret: spain-agrius-claws-keys
   activeDeadlineSeconds: 86040
   config:
-    dayOffset: 6
+    dayOffset: 5
   tokens:
     bucket: "trollhunters-beaststore"
   redis:
-    host: "agrius-redis-headless:6379"
+    host: "spain-agrius-redis-headless:6379"
   queue:
     queue: "kafka"
-    kafkaBrokers: "kafka-headless:29092"
-    topic: "tweets"
-    digTopic: "dig"
+    kafkaBrokers: "kafka-headless.default.svc.cluster.local:29092"
+    topic: "spain-tweets"
+    digTopic: "spain-dig"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
@@ -125,13 +124,13 @@ jaws:
   image:
     repository: agriuseatstweets/jaws
     tag: 0.0.10
-  envSecret: agrius-jaws-envs
-  keySecret: agrius-jaws-keys
+  envSecret: spain-agrius-jaws-envs
+  keySecret: spain-agrius-jaws-keys
   refreshInterval: "30"
   queue:
     queue: "kafka"
-    kafkaBrokers: "kafka-headless:29092"
-    topic: "livetweets"
+    kafkaBrokers: "kafka-headless.default.svc.cluster.local:29092"
+    topic: "spain-livetweets"
   sheets:
     sheetId: "1WVqs8BBFhgP-u2WsQEip0XxJkYDWcucra2iHPbs52Lc"
     users: "follows!D2:D"
