@@ -1,4 +1,7 @@
 dependencies:
+- name: dig
+  repository: https://agriuseatstweets.github.io/charts
+  version: 0.0.2
 - name: redis
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 10.5.6
@@ -23,5 +26,5 @@ dependencies:
 - name: logstash
   repository: ""
   version: 0.1.0
-digest: sha256:d59bd426df7e66e798a2234da5d0dcb2d8c66d981408cb62aebad4e6e6a5811f
-generated: "2020-03-01T19:20:12.853326247+01:00"
+digest: sha256:351c2e99cbd633c6769db6ffed10c5c213dc15e8583965dd8b09d8130b076a63
+generated: "2020-03-11T10:42:04.176244271+01:00"

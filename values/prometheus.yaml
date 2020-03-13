@@ -26,6 +26,12 @@ coreDns:
 kubeDns:
   enabled: true
 
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
 alertmanager:
   alertmanagerSpec:
     useExistingSecret: true

@@ -5,6 +5,8 @@ tags:
   streaming: false
   search: true
 
+kafkaBrokers: &kb "kafka-headless.default.svc.cluster.local:29092"
+
 redis:
   cluster:
     enabled: false
@@ -33,11 +35,39 @@ kafkaTopics:
       "retention.ms": "5184000000" # 60 days
       "compression.type": "snappy"
 
+
+dig:
+  keySecret: corona-agrius-dig-keys
+  image:
+    repository: agriuseatstweets/dig
+    tag: 0.0.1
+  schedule: "0 12 * * *"
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+  env:
+    - name: KAFKA_BROKERS
+      value: *kb
+    - name: KAFKA_POLL_TIMEOUT
+      value: "1200"
+    - name: DIG_DATALAKE
+      value: "gs://corona-tweets-datalake"
+    - name: DIG_WAREHOUSE
+      value: "gs://corona-tweets-warehouse"
+    - name: DIG_PARTITIONS
+      value: "5"
+    - name: DIG_TOPIC
+      value: "corona-dig"
+
 belly-claws:
   image:
     repository: agriuseatstweets/bellygo
-    tag: 0.0.5
-  schedule: "30 21 * * *"
+    tag: 0.0.6
+  schedule: "0 21 * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 3
@@ -63,8 +93,8 @@ belly-claws:
 claws:
   image:
     repository: agriuseatstweets/claws
-    tag: 0.0.24
-  schedule: "15 19 * * *"
+    tag: 0.0.25
+  schedule: "0 19 * * *"
   envSecret: corona-agrius-claws-envs
   keySecret: corona-agrius-claws-keys
   activeDeadlineSeconds: 86040

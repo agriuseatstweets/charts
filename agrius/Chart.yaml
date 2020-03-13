@@ -4,6 +4,9 @@ description: A Helm chart for Kubernetes
 name: agrius
 version: 0.0.2
 dependencies:
+  - name: dig
+    version: 0.0.2
+    repository: https://agriuseatstweets.github.io/charts
   - name: redis
     version: 10.5.6
     repository: https://kubernetes-charts.storage.googleapis.com
