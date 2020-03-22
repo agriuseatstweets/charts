@@ -42,9 +42,9 @@ dig:
   keySecret: spain-agrius-dig-keys
   image:
     repository: agriuseatstweets/dig
-    tag: 0.0.1
+    tag: 0.0.5
   schedule: "0 12 * * *"
-  completions: 4
+  completions: 8
   parallelism: 1
   backoffLimit: 3
   resources:
@@ -56,6 +56,8 @@ dig:
       value: *kb
     - name: KAFKA_POLL_TIMEOUT
       value: "1200"
+    - name: KAFKA_POLL_INTERVAL
+      value: '3600000'
     - name: DIG_DATALAKE
       value: "gs://spain-tweets-datalake"
     - name: DIG_WAREHOUSE
@@ -64,13 +66,17 @@ dig:
       value: "5"
     - name: DIG_TOPIC
       value: "spain-dig"
+    - name: DIG_GROUP
+      value: "dig"
+    - name: DIG_SCHEMA
+      value: "gs://spain-tweets/schemas/tweet-clean.pickle"
 
 
 belly-claws:
   image:
     repository: agriuseatstweets/bellygo
     tag: 0.0.6
-  schedule: "0 10 * * *"
+  schedule: "0 6 * * *"
   completions: 10
   parallelism: 1
   backoffLimit: 3
