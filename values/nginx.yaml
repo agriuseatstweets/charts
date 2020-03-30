@@ -1,0 +1,11 @@
+controller:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+  service:
+    loadBalancerIP: "35.190.195.176"
+
+rbac:
+  create: true

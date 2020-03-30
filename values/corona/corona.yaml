@@ -40,9 +40,9 @@ dig:
   keySecret: corona-agrius-dig-keys
   image:
     repository: agriuseatstweets/dig
-    tag: 0.0.1
-  schedule: "0 12 * * *"
-  completions: 1
+    tag: 0.0.5
+  schedule: "0 14 * * *"
+  completions: 2
   parallelism: 1
   backoffLimit: 3
   resources:
@@ -54,6 +54,8 @@ dig:
       value: *kb
     - name: KAFKA_POLL_TIMEOUT
       value: "1200"
+    - name: KAFKA_POLL_INTERVAL
+      value: '3600000'
     - name: DIG_DATALAKE
       value: "gs://corona-tweets-datalake"
     - name: DIG_WAREHOUSE
@@ -62,12 +64,16 @@ dig:
       value: "5"
     - name: DIG_TOPIC
       value: "corona-dig"
+    - name: DIG_GROUP
+      value: "dig"
+    - name: DIG_SCHEMA
+      value: "gs://spain-tweets/schemas/tweet-clean.pickle"
 
 belly-claws:
   image:
     repository: agriuseatstweets/bellygo
     tag: 0.0.6
-  schedule: "0 21 * * *"
+  schedule: "0 20 * * *"
   completions: 1
   parallelism: 1
   backoffLimit: 3
