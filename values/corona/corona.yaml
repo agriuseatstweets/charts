@@ -21,6 +21,12 @@ redis:
   metrics:
     enabled: true
 
+
+bellyLags:
+  - consumergroup: 'corona-belly'
+    limit: 500000
+    alertname: CoronaBellyLagging
+
 kafkaTopics:
   - name: corona-tweets
     partitions: 2

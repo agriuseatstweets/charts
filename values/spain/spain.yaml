@@ -17,6 +17,10 @@ redis:
   metrics:
     enabled: true
 
+bellyLags:
+  - consumergroup: 'spain-belly'
+    limit: 12000000
+    alertname: SpainBellyLagging
 
 kafkaTopics:
   - name: spain-tweets
@@ -77,7 +81,7 @@ belly-claws:
     repository: agriuseatstweets/bellygo
     tag: 0.0.6
   schedule: "0 6 * * *"
-  completions: 10
+  completions: 18
   parallelism: 1
   backoffLimit: 3
   resources:

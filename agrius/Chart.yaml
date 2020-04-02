@@ -5,7 +5,7 @@ name: agrius
 version: 0.0.2
 dependencies:
   - name: dig
-    version: 0.0.2
+    version: 0.0.3
     repository: https://agriuseatstweets.github.io/charts
   - name: redis
     version: 10.5.6

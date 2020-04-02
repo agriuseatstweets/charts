@@ -5,8 +5,8 @@ tags:
   streaming: true
   search: true
 
-
-kafkaTopics: {}
+bellyLags: []
+kafkaTopics: []
 redis: {}
 
 dig: {}

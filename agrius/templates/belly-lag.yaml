@@ -1,20 +1,21 @@
+{{- range .Values.bellyLags }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: prometheus-kafka-offsets
+  name: prometheus-kafka-agrius-{{ .consumergroup }}-lagging
   labels:
     heritage: Helm
     release: prometheus
   namespace: monitoring
 spec:
   groups:
-  - name: Kafka consumer group has high lag
-    interval: 1m
+  - name: Agrius belly is beginning to lag
+    interval: 6h
     rules:
-      - alert: KafkaConsumerGroupLagging
+      - alert: Agrius{{ .alertname }}
         expr: |
-          max(sum(kafka_consumergroup_lag) by (group)) > 1000
-        for: 1m
+          sum(kafka_consumergroup_lag_sum{consumergroup="{{ .consumergroup }}"}) > {{ .limit }}
+        for: 180m
         labels:
           severity: warning
         annotations:
@@ -22,3 +23,5 @@ spec:
             Kafka consumer lag...
           description: |
             Kafka consumer lag...
+---
+{{- end }}
