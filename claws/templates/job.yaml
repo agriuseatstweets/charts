@@ -38,12 +38,8 @@ spec:
                 value: "{{ .Values.queue.digTopic }}"
               - name: CLAWS_SHEET_ID
                 value: "{{ .Values.sheets.sheetId }}"
-              - name: CLAWS_SHEET_USERS
-                value: "{{ .Values.sheets.users }}"
-              - name: CLAWS_SHEET_HASHTAGS
-                value: "{{ .Values.sheets.hashtags }}"
-              - name: CLAWS_SHEET_URLS
-                value: "{{ .Values.sheets.urls }}"
+              - name: CLAWS_SHEET_QUERIES
+                value: "{{ .Values.sheets.queries }}"
               - name: CLAWS_SHEET_LOCATIONS
                 value: "{{ .Values.sheets.locations }}"
               - name: CLAWS_DAY_OFFSET

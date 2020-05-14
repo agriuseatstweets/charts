@@ -1,6 +1,6 @@
 image:
-  repository: nandanrao/agrius-claws
-  tag: 0.0.1
+  repository: agriuseatstweets/claws
+  tag: 0.0.26
   pullPolicy: IfNotPresent
 
 nameOverride: ""
